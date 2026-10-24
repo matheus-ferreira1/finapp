@@ -1,10 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { Category, SplitRule, TransactionType } from '../../lib/api'
+import { CELL_CLASS as CELL } from '../../components/ui'
 import { withType, type Draft } from '../../lib/transaction-form'
-
-// Cells look like plain text until hovered or focused, like a spreadsheet.
-const CELL =
-  'w-full min-w-0 rounded bg-transparent px-2 py-1 text-sm hover:bg-slate-100 focus:bg-white focus:outline-2 focus:outline-emerald-500 disabled:opacity-40 dark:hover:bg-slate-800 dark:focus:bg-slate-900'
 
 const TYPES: TransactionType[] = ['income', 'expense', 'settlement']
 

@@ -93,5 +93,37 @@
       "invalidDate": "Informe uma data válida.",
       "invalidInstallment": "Use o formato parcela/total, por exemplo 2/12."
     }
+  },
+  "recurrences": {
+    "columns": {
+      "day": "Dia",
+      "description": "Descrição",
+      "type": "Tipo",
+      "category": "Categoria",
+      "amount": "Valor estimado",
+      "split": "Compartilhamento",
+      "active": "Ativa"
+    },
+    "newRow": "Nova recorrência",
+    "empty": "Nenhuma recorrência cadastrada.",
+    "generate": {
+      "title": "Gerar lançamentos do mês",
+      "hint": "Cria um lançamento não confirmado para cada recorrência ativa. Gerar o mesmo mês de novo não duplica nada.",
+      "month": "Mês",
+      "button": "Gerar lançamentos",
+      "chooseMonth": "Escolha o mês a gerar.",
+      "created_one": "{{count}} lançamento criado.",
+      "created_other": "{{count}} lançamentos criados.",
+      "existed_one": "{{count}} já existia.",
+      "existed_other": "{{count}} já existiam.",
+      "nothing": "Nada a gerar: todas as recorrências ativas já foram geradas neste mês.",
+      "noActive": "Nenhuma recorrência ativa para gerar.",
+      "view": "Ver lançamentos de {{month}}"
+    },
+    "errors": {
+      "invalidDay": "Informe um dia entre 1 e 31.",
+      "descriptionRequired": "Informe uma descrição.",
+      "invalidAmount": "Informe um valor maior que zero."
+    }
   }
 }

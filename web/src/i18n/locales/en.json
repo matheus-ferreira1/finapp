@@ -93,5 +93,37 @@
       "invalidDate": "Enter a valid date.",
       "invalidInstallment": "Use the installment/total format, for example 2/12."
     }
+  },
+  "recurrences": {
+    "columns": {
+      "day": "Day",
+      "description": "Description",
+      "type": "Type",
+      "category": "Category",
+      "amount": "Estimated amount",
+      "split": "Sharing",
+      "active": "Active"
+    },
+    "newRow": "New recurrence",
+    "empty": "No recurrences yet.",
+    "generate": {
+      "title": "Generate the month's transactions",
+      "hint": "Creates an unconfirmed transaction for each active recurrence. Generating the same month again creates nothing twice.",
+      "month": "Month",
+      "button": "Generate transactions",
+      "chooseMonth": "Pick the month to generate.",
+      "created_one": "{{count}} transaction created.",
+      "created_other": "{{count}} transactions created.",
+      "existed_one": "{{count}} already existed.",
+      "existed_other": "{{count}} already existed.",
+      "nothing": "Nothing to generate: every active recurrence was already generated this month.",
+      "noActive": "No active recurrences to generate.",
+      "view": "View transactions of {{month}}"
+    },
+    "errors": {
+      "invalidDay": "Enter a day between 1 and 31.",
+      "descriptionRequired": "Enter a description.",
+      "invalidAmount": "Enter an amount greater than zero."
+    }
   }
 }

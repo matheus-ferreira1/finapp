@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import type { Category, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
+import type { Category, Recurrence, RecurrenceInput, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
 
 export const defaultSettings: Settings = { partner_name: '', currency: 'BRL', locale: 'pt-BR' }
 
@@ -25,6 +25,9 @@ export interface FakeServerState {
   categories: Category[]
   splitRules: SplitRule[]
   transactions: Transaction[]
+  recurrences: Recurrence[]
+  /** `recurrenceId:YYYY-MM` of what was already generated. */
+  generated: string[]
   /** Split rule ids whose percent is frozen (used by transactions). */
   splitRulesInUse: number[]
   /** Every non-GET request received, in order. */
@@ -41,6 +44,8 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
     categories: [],
     splitRules: [],
     transactions: [],
+    recurrences: [],
+    generated: [],
     splitRulesInUse: [],
     writes: [],
     ...initial,
@@ -62,6 +67,44 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
       shared = body.amount_cents - my
     }
     return { ...body, id, my_cents: my, shared_cents: shared, recurrence_id: null, recurrence_month: null }
+  }
+
+  const saveRecurrence = (id: number, body: RecurrenceInput): Response | Recurrence => {
+    if (!Number.isInteger(body.day) || body.day < 1 || body.day > 31) {
+      return json(400, { error: 'day must be between 1 and 31' })
+    }
+    if (body.description.trim() === '') return json(400, { error: 'description is required' })
+    if (!(body.estimated_amount_cents > 0)) return json(400, { error: 'amount must be greater than zero' })
+    if (body.category_id === null) return json(400, { error: 'category is required for income and expense' })
+    return { ...body, id }
+  }
+
+  /** Mirrors the idempotent generation: one transaction per recurrence and month. */
+  const generate = (month: string) => {
+    const [year, m] = month.split('-').map(Number)
+    const lastDay = new Date(year, m, 0).getDate()
+    const created: Transaction[] = []
+    let skipped = 0
+    for (const rec of [...state.recurrences].sort((a, b) => a.day - b.day || a.id - b.id)) {
+      if (!rec.active) continue
+      const key = `${rec.id}:${month}`
+      if (state.generated.includes(key)) {
+        skipped++
+        continue
+      }
+      const date = `${month}-${String(Math.min(rec.day, lastDay)).padStart(2, '0')}`
+      const tx = saveTransaction(nextId++, {
+        date, description: rec.description, type: rec.type, category_id: rec.category_id,
+        amount_cents: rec.estimated_amount_cents, split_rule_id: rec.split_rule_id,
+        installment_number: null, installment_total: null, confirmed: false,
+      }) as Transaction
+      tx.recurrence_id = rec.id
+      tx.recurrence_month = month
+      state.transactions.push(tx)
+      state.generated.push(key)
+      created.push(tx)
+    }
+    return { created, skipped }
   }
 
   const handle = (method: string, url: URL, body: Record<string, unknown>): Response => {
@@ -115,6 +158,36 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
       const index = state.transactions.findIndex((t) => t.id === id)
       if (index < 0) return json(404, { error: 'not found' })
       state.transactions.splice(index, 1)
+      return new Response(null, { status: 204 })
+    }
+
+    if (path === '/api/recurrences' && method === 'GET') {
+      return json(200, [...state.recurrences].sort((a, b) => a.day - b.day || a.id - b.id))
+    }
+    if (path === '/api/recurrences' && method === 'POST') {
+      const saved = saveRecurrence(nextId++, body as unknown as RecurrenceInput)
+      if (saved instanceof Response) return saved
+      state.recurrences.push(saved)
+      return json(201, saved)
+    }
+    if (path === '/api/recurrences/generate' && method === 'POST') {
+      if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(String(body.month))) {
+        return json(400, { error: 'month must be in the YYYY-MM format' })
+      }
+      return json(200, generate(String(body.month)))
+    }
+    if (path.startsWith('/api/recurrences/') && method === 'PUT') {
+      const index = state.recurrences.findIndex((r) => r.id === id)
+      if (index < 0) return json(404, { error: 'not found' })
+      const saved = saveRecurrence(id, body as unknown as RecurrenceInput)
+      if (saved instanceof Response) return saved
+      state.recurrences[index] = saved
+      return json(200, saved)
+    }
+    if (path.startsWith('/api/recurrences/') && method === 'DELETE') {
+      const index = state.recurrences.findIndex((r) => r.id === id)
+      if (index < 0) return json(404, { error: 'not found' })
+      state.recurrences.splice(index, 1)
       return new Response(null, { status: 204 })
     }
 
