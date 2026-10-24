@@ -1,0 +1,14 @@
+# Binaries and local data
+/finapp
+/dist/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Web
+web/node_modules/
+web/dist/*
+!web/dist/.gitkeep
+
+.DS_Store
