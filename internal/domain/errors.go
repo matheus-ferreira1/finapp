@@ -12,4 +12,7 @@ var (
 	ErrInvalidSplitPercent = errors.New("split percent must be between 0 and 100")
 	ErrInvalidInstallment  = errors.New("installment must be a number between 1 and the total")
 	ErrNameRequired        = errors.New("name is required")
+	ErrDescriptionRequired = errors.New("description is required")
+	ErrInvalidDay          = errors.New("day must be between 1 and 31")
+	ErrInvalidYearMonth    = errors.New("month must be in the YYYY-MM format")
 )

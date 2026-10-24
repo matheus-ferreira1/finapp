@@ -22,6 +22,7 @@ type Transaction struct {
 	InstallmentNumber *int
 	InstallmentTotal  *int
 	Confirmed         bool
+	Recurrence        *RecurrenceRef // set when generated from a recurrence
 }
 
 // My is the part of the transaction that is really mine.
