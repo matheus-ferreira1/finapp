@@ -1,0 +1,15 @@
+{
+  "app": { "name": "finapp" },
+  "nav": {
+    "label": "Sections",
+    "transactions": "Transactions",
+    "summary": "Monthly Summary",
+    "spending": "Spending by Category",
+    "recurrences": "Recurrences",
+    "settings": "Settings"
+  },
+  "errors": {
+    "server": "Could not connect to the server. Make sure finapp is running."
+  },
+  "actions": { "retry": "Try again" }
+}
