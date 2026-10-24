@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import type { Category, Recurrence, RecurrenceInput, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
+import type { Category, MonthSummary, Recurrence, RecurrenceInput, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
 
 export const defaultSettings: Settings = { partner_name: '', currency: 'BRL', locale: 'pt-BR' }
 
@@ -30,6 +30,12 @@ export interface FakeServerState {
   generated: string[]
   /** Split rule ids whose percent is frozen (used by transactions). */
   splitRulesInUse: number[]
+  /** What the monthly report returns for any year; the server does not recompute it from the transactions. */
+  monthly: MonthSummary[]
+  /** When set, the monthly report fails with this message. */
+  monthlyFailure: string | null
+  /** The years asked of the monthly report, in order. */
+  monthlyRequests: number[]
   /** Every non-GET request received, in order. */
   writes: { method: string; path: string; body: unknown }[]
 }
@@ -47,6 +53,9 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
     recurrences: [],
     generated: [],
     splitRulesInUse: [],
+    monthly: [],
+    monthlyFailure: null,
+    monthlyRequests: [],
     writes: [],
     ...initial,
   }
@@ -189,6 +198,13 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
       if (index < 0) return json(404, { error: 'not found' })
       state.recurrences.splice(index, 1)
       return new Response(null, { status: 204 })
+    }
+
+    if (path === '/api/reports/monthly' && method === 'GET') {
+      const year = Number(url.searchParams.get('year'))
+      state.monthlyRequests.push(year)
+      if (state.monthlyFailure) return json(500, { error: state.monthlyFailure })
+      return json(200, { year, months: state.monthly })
     }
 
     if (path === '/api/split-rules' && method === 'GET') {

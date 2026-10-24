@@ -5,6 +5,11 @@ export function currentMonth(now: Date = new Date()): string {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}`
 }
 
+/** The year of a date, in local time. */
+export function currentYear(now: Date = new Date()): number {
+  return now.getFullYear()
+}
+
 export function isValidMonth(value: string | null): value is string {
   return value !== null && /^\d{4}-(0[1-9]|1[0-2])$/.test(value)
 }
@@ -24,4 +29,9 @@ export function shiftMonth(month: string, delta: number): string {
 /** Today as an ISO date (YYYY-MM-DD), in local time. */
 export function todayISO(now: Date = new Date()): string {
   return `${currentMonth(now)}-${pad(now.getDate())}`
+}
+
+/** A four-digit year, or null when the value is not one. */
+export function parseYear(value: string | null): number | null {
+  return value !== null && /^[1-9]\d{3}$/.test(value) ? Number(value) : null
 }

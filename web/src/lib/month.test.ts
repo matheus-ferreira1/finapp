@@ -1,9 +1,14 @@
-import { currentMonth, isValidMonth, monthParts, shiftMonth, todayISO } from './month'
+import { currentMonth, currentYear, isValidMonth, monthParts, parseYear, shiftMonth, todayISO } from './month'
 
 describe('month helpers', () => {
   it('reads the current month from a date', () => {
     expect(currentMonth(new Date(2026, 10, 24))).toBe('2026-11')
     expect(currentMonth(new Date(2026, 0, 1))).toBe('2026-01')
+  })
+
+  it('reads the current year from a date', () => {
+    expect(currentYear(new Date(2026, 11, 31))).toBe(2026)
+    expect(currentYear(new Date(2027, 0, 1))).toBe(2027)
   })
 
   it.each([
@@ -37,5 +42,19 @@ describe('month helpers', () => {
   it('writes today as an ISO date in local time', () => {
     expect(todayISO(new Date(2026, 10, 4))).toBe('2026-11-04')
     expect(todayISO(new Date(2026, 11, 31))).toBe('2026-12-31')
+  })
+})
+
+describe('parseYear', () => {
+  it.each([
+    ['2026', 2026],
+    ['1000', 1000],
+    ['9999', 9999],
+  ])('reads %s', (value, expected) => {
+    expect(parseYear(value)).toBe(expected)
+  })
+
+  it.each([null, '', '26', '202', '20260', '0999', 'abc', '2026-01', '-2026', '20.5'])('rejects %s', (value) => {
+    expect(parseYear(value)).toBeNull()
   })
 })

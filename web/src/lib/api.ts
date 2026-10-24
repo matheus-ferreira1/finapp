@@ -78,6 +78,37 @@ export interface Generation {
   skipped: number
 }
 
+export interface Totals {
+  income_cents: number
+  expense_cents: number
+  balance_cents: number
+}
+
+export interface Figures {
+  gross: Totals
+  mine: Totals
+  shared_cents: number
+  settled_cents: number
+  /** Shared minus settled, in the month. */
+  owed_cents: number
+  /** Owed since the beginning, up to the end of the month. */
+  owed_to_date_cents: number
+}
+
+export interface MonthSummary {
+  /** 1 to 12. */
+  month: number
+  /** Every transaction. */
+  planned: Figures
+  /** Confirmed transactions only. */
+  realized: Figures
+}
+
+export interface MonthlyReport {
+  year: number
+  months: MonthSummary[]
+}
+
 /** An error response from the server, carrying its HTTP status and message. */
 export class ApiError extends Error {
   readonly status: number
@@ -133,6 +164,8 @@ export const api = {
     request<Recurrence>('PUT', `/api/recurrences/${id}`, input),
   deleteRecurrence: (id: number) => request('DELETE', `/api/recurrences/${id}`),
   generateRecurrences: (month: string) => request<Generation>('POST', '/api/recurrences/generate', { month }),
+
+  monthlyReport: (year: number) => request<MonthlyReport>('GET', `/api/reports/monthly?year=${year}`),
 
   listSplitRules: () => request<SplitRule[]>('GET', '/api/split-rules?archived=true'),
   createSplitRule: (input: SplitRuleInput) => request<SplitRule>('POST', '/api/split-rules', input),
