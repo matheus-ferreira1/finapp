@@ -1,0 +1,15 @@
+{
+  "app": { "name": "finapp" },
+  "nav": {
+    "label": "Seções",
+    "transactions": "Lançamentos",
+    "summary": "Resumo Mensal",
+    "spending": "Gastos por Categoria",
+    "recurrences": "Recorrências",
+    "settings": "Configuração"
+  },
+  "errors": {
+    "server": "Não foi possível conectar ao servidor. Verifique se o finapp está em execução."
+  },
+  "actions": { "retry": "Tentar novamente" }
+}
