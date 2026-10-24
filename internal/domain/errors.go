@@ -15,4 +15,8 @@ var (
 	ErrDescriptionRequired = errors.New("description is required")
 	ErrInvalidDay          = errors.New("day must be between 1 and 31")
 	ErrInvalidYearMonth    = errors.New("month must be in the YYYY-MM format")
+
+	ErrNotFound       = errors.New("not found")
+	ErrDuplicate      = errors.New("already exists")
+	ErrSplitRuleInUse = errors.New("split rule is in use, archive it and create a new one instead of changing its percent")
 )
