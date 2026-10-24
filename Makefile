@@ -11,6 +11,7 @@ dev:
 
 web:
 	cd web && npm ci && npm run build
+	touch web/dist/.gitkeep
 
 test: test-go test-web
 
