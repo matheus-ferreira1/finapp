@@ -52,5 +52,46 @@
       "invalidPercent": "A minha parte deve ser um número inteiro entre 0 e 100.",
       "hint": "Defina como um gasto compartilhado é dividido. O percentual de uma regra já usada não pode mudar: arquive-a e crie outra."
     }
+  },
+  "transactions": {
+    "month": "Mês",
+    "previous": "Mês anterior",
+    "next": "Próximo mês",
+    "columns": {
+      "date": "Data",
+      "description": "Descrição",
+      "type": "Tipo",
+      "category": "Categoria",
+      "amount": "Valor",
+      "split": "Compartilhamento",
+      "installment": "Parcela",
+      "confirmed": "Confirmado",
+      "mine": "Meu valor",
+      "shared": "Valor compartilhado"
+    },
+    "types": {
+      "income": "Receita",
+      "expense": "Despesa",
+      "settlement": "Acerto"
+    },
+    "noCategory": "—",
+    "onlyMine": "Só meu",
+    "newRow": "Novo lançamento",
+    "empty": "Nenhum lançamento neste mês.",
+    "totals": {
+      "label": "Totais do mês",
+      "income": "Receitas",
+      "expense": "Despesas",
+      "settlement": "Acertos",
+      "mine": "Minha parte",
+      "shared": "Compartilhado"
+    },
+    "delete": "Excluir",
+    "confirmDelete": "Confirmar exclusão",
+    "errors": {
+      "invalidAmount": "Informe um valor maior que zero.",
+      "invalidDate": "Informe uma data válida.",
+      "invalidInstallment": "Use o formato parcela/total, por exemplo 2/12."
+    }
   }
 }

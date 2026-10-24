@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import type { Category, Settings, SplitRule } from './lib/api'
+import type { Category, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
 
 export const defaultSettings: Settings = { partner_name: '', currency: 'BRL', locale: 'pt-BR' }
 
@@ -24,6 +24,7 @@ export interface FakeServerState {
   settings: Settings
   categories: Category[]
   splitRules: SplitRule[]
+  transactions: Transaction[]
   /** Split rule ids whose percent is frozen (used by transactions). */
   splitRulesInUse: number[]
   /** Every non-GET request received, in order. */
@@ -39,11 +40,29 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
     settings: { ...defaultSettings },
     categories: [],
     splitRules: [],
+    transactions: [],
     splitRulesInUse: [],
     writes: [],
     ...initial,
   }
   let nextId = 100
+
+  /** Mirrors the server: validation errors and the computed my/shared amounts. */
+  const saveTransaction = (id: number, body: TransactionInput): Response | Transaction => {
+    if (!(body.amount_cents > 0)) return json(400, { error: 'amount must be greater than zero' })
+    if (body.type !== 'settlement' && body.category_id === null) {
+      return json(400, { error: 'category is required for income and expense' })
+    }
+    const rule = state.splitRules.find((r) => r.id === body.split_rule_id)
+    let my = body.amount_cents
+    let shared = 0
+    if (body.type === 'settlement') my = 0
+    if (body.type === 'expense' && rule) {
+      my = Math.floor((body.amount_cents * rule.my_percent + 50) / 100)
+      shared = body.amount_cents - my
+    }
+    return { ...body, id, my_cents: my, shared_cents: shared, recurrence_id: null, recurrence_month: null }
+  }
 
   const handle = (method: string, url: URL, body: Record<string, unknown>): Response => {
     const path = url.pathname
@@ -71,6 +90,32 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
       if (index < 0) return json(404, { error: 'not found' })
       state.categories[index] = { ...state.categories[index], ...body } as Category
       return json(200, state.categories[index])
+    }
+
+    if (path === '/api/transactions' && method === 'GET') {
+      const month = url.searchParams.get('month') ?? ''
+      const inMonth = state.transactions.filter((t) => t.date.startsWith(month))
+      return json(200, inMonth.sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id))
+    }
+    if (path === '/api/transactions' && method === 'POST') {
+      const saved = saveTransaction(nextId++, body as unknown as TransactionInput)
+      if (saved instanceof Response) return saved
+      state.transactions.push(saved)
+      return json(201, saved)
+    }
+    if (path.startsWith('/api/transactions/') && method === 'PUT') {
+      const index = state.transactions.findIndex((t) => t.id === id)
+      if (index < 0) return json(404, { error: 'not found' })
+      const saved = saveTransaction(id, body as unknown as TransactionInput)
+      if (saved instanceof Response) return saved
+      state.transactions[index] = saved
+      return json(200, saved)
+    }
+    if (path.startsWith('/api/transactions/') && method === 'DELETE') {
+      const index = state.transactions.findIndex((t) => t.id === id)
+      if (index < 0) return json(404, { error: 'not found' })
+      state.transactions.splice(index, 1)
+      return new Response(null, { status: 204 })
     }
 
     if (path === '/api/split-rules' && method === 'GET') {

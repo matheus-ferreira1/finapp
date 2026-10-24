@@ -5,6 +5,7 @@ export const queryKeys = {
   settings: ['settings'] as const,
   categories: ['categories'] as const,
   splitRules: ['split-rules'] as const,
+  transactions: ['transactions'] as const,
 }
 
 export const useCategories = () => useQuery({ queryKey: queryKeys.categories, queryFn: api.listCategories })
@@ -15,3 +16,6 @@ export const useSplitRules = () => useQuery({ queryKey: queryKeys.splitRules, qu
 export function errorText(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
+
+export const useTransactions = (month: string) =>
+  useQuery({ queryKey: [...queryKeys.transactions, month], queryFn: () => api.listTransactions(month) })
