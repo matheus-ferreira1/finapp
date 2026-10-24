@@ -68,3 +68,7 @@ export function Badge({ children }: { children: ReactNode }) {
     </span>
   )
 }
+
+/** Style of an editable cell: plain text until hovered or focused, like a spreadsheet. */
+export const CELL_CLASS =
+  'w-full min-w-0 rounded bg-transparent px-2 py-1 text-sm hover:bg-slate-100 focus:bg-white focus:outline-2 focus:outline-emerald-500 disabled:opacity-40 dark:hover:bg-slate-800 dark:focus:bg-slate-900'
