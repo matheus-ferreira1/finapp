@@ -1,0 +1,17 @@
+import { useQuery } from '@tanstack/react-query'
+import { api } from './api'
+
+export const queryKeys = {
+  settings: ['settings'] as const,
+  categories: ['categories'] as const,
+  splitRules: ['split-rules'] as const,
+}
+
+export const useCategories = () => useQuery({ queryKey: queryKeys.categories, queryFn: api.listCategories })
+
+export const useSplitRules = () => useQuery({ queryKey: queryKeys.splitRules, queryFn: api.listSplitRules })
+
+/** The message to show for a failed request. */
+export function errorText(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
+}

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { api, type Settings } from '../lib/api'
+import { queryKeys } from '../lib/queries'
 import { formatDate, formatMoney } from '../lib/format'
 import { SettingsContext, type SettingsContextValue } from './settings-context'
 
@@ -13,7 +14,7 @@ const DEFAULT_SETTINGS: Settings = { partner_name: '', currency: 'BRL', locale: 
  */
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const { i18n } = useTranslation()
-  const query = useQuery({ queryKey: ['settings'], queryFn: api.getSettings })
+  const query = useQuery({ queryKey: queryKeys.settings, queryFn: api.getSettings })
   const settings = query.data ?? DEFAULT_SETTINGS
   const { locale, currency } = settings
 

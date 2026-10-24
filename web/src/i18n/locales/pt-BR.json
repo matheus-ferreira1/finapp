@@ -1,5 +1,7 @@
 {
-  "app": { "name": "finapp" },
+  "app": {
+    "name": "finapp"
+  },
   "nav": {
     "label": "Seções",
     "transactions": "Lançamentos",
@@ -11,5 +13,44 @@
   "errors": {
     "server": "Não foi possível conectar ao servidor. Verifique se o finapp está em execução."
   },
-  "actions": { "retry": "Tentar novamente" }
+  "actions": {
+    "retry": "Tentar novamente",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "add": "Adicionar",
+    "edit": "Editar",
+    "archive": "Arquivar",
+    "restore": "Restaurar"
+  },
+  "common": {
+    "name": "Nome",
+    "archived": "Arquivada",
+    "empty": "Nada cadastrado ainda."
+  },
+  "settings": {
+    "general": {
+      "title": "Geral",
+      "partnerName": "Nome do(a) parceiro(a)",
+      "currency": "Código da moeda",
+      "language": "Idioma",
+      "saved": "Configurações salvas"
+    },
+    "languages": {
+      "pt-BR": "Português (Brasil)",
+      "en": "English"
+    },
+    "categories": {
+      "income": "Receitas",
+      "expense": "Despesas",
+      "newName": "Nome da nova categoria"
+    },
+    "splitRules": {
+      "title": "Compartilhamento",
+      "newName": "Nome da regra",
+      "myPercent": "Minha parte (%)",
+      "editPercent": "Minha parte da regra (%)",
+      "invalidPercent": "A minha parte deve ser um número inteiro entre 0 e 100.",
+      "hint": "Defina como um gasto compartilhado é dividido. O percentual de uma regra já usada não pode mudar: arquive-a e crie outra."
+    }
+  }
 }
