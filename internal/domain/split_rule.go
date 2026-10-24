@@ -7,6 +7,7 @@ type SplitRule struct {
 	ID        int64
 	Name      string
 	MyPercent int
+	Archived  bool
 }
 
 func (r SplitRule) Validate() error {
