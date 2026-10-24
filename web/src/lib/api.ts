@@ -58,6 +58,26 @@ export type TransactionInput = Omit<
   'id' | 'my_cents' | 'shared_cents' | 'recurrence_id' | 'recurrence_month'
 >
 
+export interface Recurrence {
+  id: number
+  /** Day of the month; short months use their last day. */
+  day: number
+  description: string
+  type: 'income' | 'expense'
+  category_id: number | null
+  estimated_amount_cents: number
+  split_rule_id: number | null
+  active: boolean
+}
+
+export type RecurrenceInput = Omit<Recurrence, 'id'>
+
+export interface Generation {
+  created: Transaction[]
+  /** Recurrences that already had their transaction for the month. */
+  skipped: number
+}
+
 /** An error response from the server, carrying its HTTP status and message. */
 export class ApiError extends Error {
   readonly status: number
@@ -106,6 +126,13 @@ export const api = {
   updateTransaction: (id: number, input: TransactionInput) =>
     request<Transaction>('PUT', `/api/transactions/${id}`, input),
   deleteTransaction: (id: number) => request('DELETE', `/api/transactions/${id}`),
+
+  listRecurrences: () => request<Recurrence[]>('GET', '/api/recurrences'),
+  createRecurrence: (input: RecurrenceInput) => request<Recurrence>('POST', '/api/recurrences', input),
+  updateRecurrence: (id: number, input: RecurrenceInput) =>
+    request<Recurrence>('PUT', `/api/recurrences/${id}`, input),
+  deleteRecurrence: (id: number) => request('DELETE', `/api/recurrences/${id}`),
+  generateRecurrences: (month: string) => request<Generation>('POST', '/api/recurrences/generate', { month }),
 
   listSplitRules: () => request<SplitRule[]>('GET', '/api/split-rules?archived=true'),
   createSplitRule: (input: SplitRuleInput) => request<SplitRule>('POST', '/api/split-rules', input),
