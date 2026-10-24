@@ -52,5 +52,46 @@
       "invalidPercent": "My share must be a whole number between 0 and 100.",
       "hint": "Define how a shared expense is divided. The percent of a rule already in use cannot change: archive it and create another."
     }
+  },
+  "transactions": {
+    "month": "Month",
+    "previous": "Previous month",
+    "next": "Next month",
+    "columns": {
+      "date": "Date",
+      "description": "Description",
+      "type": "Type",
+      "category": "Category",
+      "amount": "Amount",
+      "split": "Sharing",
+      "installment": "Installment",
+      "confirmed": "Confirmed",
+      "mine": "My amount",
+      "shared": "Shared amount"
+    },
+    "types": {
+      "income": "Income",
+      "expense": "Expense",
+      "settlement": "Settlement"
+    },
+    "noCategory": "—",
+    "onlyMine": "Only mine",
+    "newRow": "New transaction",
+    "empty": "No transactions this month.",
+    "totals": {
+      "label": "Month totals",
+      "income": "Income",
+      "expense": "Expenses",
+      "settlement": "Settlements",
+      "mine": "My share",
+      "shared": "Shared"
+    },
+    "delete": "Delete",
+    "confirmDelete": "Confirm deletion",
+    "errors": {
+      "invalidAmount": "Enter an amount greater than zero.",
+      "invalidDate": "Enter a valid date.",
+      "invalidInstallment": "Use the installment/total format, for example 2/12."
+    }
   }
 }
