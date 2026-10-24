@@ -12,16 +12,22 @@ import (
 )
 
 func main() {
+	if err := run(); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run() error {
 	addr := flag.String("addr", "127.0.0.1:8080", "address to listen on")
 	dbPath := flag.String("db", "finapp.db", "path to the SQLite database file")
 	flag.Parse()
 
 	store, err := sqlite.Open(*dbPath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	defer store.Close()
+	defer func() { _ = store.Close() }()
 
 	log.Printf("finapp listening on http://%s (database: %s)", *addr, *dbPath)
-	log.Fatal(http.ListenAndServe(*addr, httpapi.NewHandler(app.New(store), web.Dist())))
+	return http.ListenAndServe(*addr, httpapi.NewHandler(app.New(store), web.Dist()))
 }
