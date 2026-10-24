@@ -1,5 +1,7 @@
 {
-  "app": { "name": "finapp" },
+  "app": {
+    "name": "finapp"
+  },
   "nav": {
     "label": "Sections",
     "transactions": "Transactions",
@@ -11,5 +13,44 @@
   "errors": {
     "server": "Could not connect to the server. Make sure finapp is running."
   },
-  "actions": { "retry": "Try again" }
+  "actions": {
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "archive": "Archive",
+    "restore": "Restore"
+  },
+  "common": {
+    "name": "Name",
+    "archived": "Archived",
+    "empty": "Nothing here yet."
+  },
+  "settings": {
+    "general": {
+      "title": "General",
+      "partnerName": "Partner's name",
+      "currency": "Currency code",
+      "language": "Language",
+      "saved": "Settings saved"
+    },
+    "languages": {
+      "pt-BR": "Português (Brasil)",
+      "en": "English"
+    },
+    "categories": {
+      "income": "Income",
+      "expense": "Expenses",
+      "newName": "New category name"
+    },
+    "splitRules": {
+      "title": "Sharing",
+      "newName": "Rule name",
+      "myPercent": "My share (%)",
+      "editPercent": "Rule's my share (%)",
+      "invalidPercent": "My share must be a whole number between 0 and 100.",
+      "hint": "Define how a shared expense is divided. The percent of a rule already in use cannot change: archive it and create another."
+    }
+  }
 }
