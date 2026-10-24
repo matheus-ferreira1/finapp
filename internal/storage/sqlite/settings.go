@@ -8,7 +8,7 @@ func (s *Store) Settings(ctx context.Context) (map[string]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }() // rows.Err() reports the failures that matter
 
 	out := make(map[string]string)
 	for rows.Next() {

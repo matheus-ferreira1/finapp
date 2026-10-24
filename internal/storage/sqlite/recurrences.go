@@ -51,7 +51,7 @@ func (s *Store) ListRecurrences(ctx context.Context) ([]domain.Recurrence, error
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }() // rows.Err() reports the failures that matter
 
 	var out []domain.Recurrence
 	for rows.Next() {

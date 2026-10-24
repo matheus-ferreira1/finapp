@@ -97,7 +97,7 @@ func (s *Store) queryTransactions(ctx context.Context, where string, args ...any
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }() // rows.Err() reports the failures that matter
 
 	var out []domain.Transaction
 	for rows.Next() {

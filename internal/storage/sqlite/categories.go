@@ -32,7 +32,7 @@ func (s *Store) ListCategories(ctx context.Context, includeArchived bool) ([]dom
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }() // rows.Err() reports the failures that matter
 
 	var out []domain.Category
 	for rows.Next() {
