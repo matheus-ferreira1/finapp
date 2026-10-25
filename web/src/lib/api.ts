@@ -109,6 +109,25 @@ export interface MonthlyReport {
   months: MonthSummary[]
 }
 
+export type CategoryReportView = 'gross' | 'mine'
+export type CategoryReportScope = 'all' | 'confirmed'
+
+export interface CategoryReportRow {
+  category_id: number
+  name: string
+  archived: boolean
+  /** Twelve amounts, January first. */
+  months: number[]
+  total_cents: number
+}
+
+export interface CategoryReport {
+  year: number
+  view: CategoryReportView
+  scope: CategoryReportScope
+  rows: CategoryReportRow[]
+}
+
 /** An error response from the server, carrying its HTTP status and message. */
 export class ApiError extends Error {
   readonly status: number
@@ -166,6 +185,9 @@ export const api = {
   generateRecurrences: (month: string) => request<Generation>('POST', '/api/recurrences/generate', { month }),
 
   monthlyReport: (year: number) => request<MonthlyReport>('GET', `/api/reports/monthly?year=${year}`),
+
+  categoryReport: (year: number, view: CategoryReportView, scope: CategoryReportScope) =>
+    request<CategoryReport>('GET', `/api/reports/categories?year=${year}&view=${view}&scope=${scope}`),
 
   listSplitRules: () => request<SplitRule[]>('GET', '/api/split-rules?archived=true'),
   createSplitRule: (input: SplitRuleInput) => request<SplitRule>('POST', '/api/split-rules', input),

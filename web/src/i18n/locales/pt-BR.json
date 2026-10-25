@@ -55,9 +55,6 @@
     }
   },
   "summary": {
-    "year": "Ano",
-    "previous": "Ano anterior",
-    "next": "Próximo ano",
     "sections": {
       "gross": "Bruto",
       "mine": "Meu",
@@ -149,6 +146,28 @@
       "invalidDay": "Informe um dia entre 1 e 31.",
       "descriptionRequired": "Informe uma descrição.",
       "invalidAmount": "Informe um valor maior que zero."
+    }
+  },
+  "yearNav": {
+    "year": "Ano",
+    "previous": "Ano anterior",
+    "next": "Próximo ano"
+  },
+  "spending": {
+    "view": "Visão",
+    "scope": "Valores",
+    "empty": "Nenhum gasto neste ano.",
+    "views": {
+      "gross": "Bruto",
+      "mine": "Meu"
+    },
+    "scopes": {
+      "all": "Previsto",
+      "confirmed": "Realizado"
+    },
+    "columns": {
+      "category": "Categoria",
+      "total": "Total"
     }
   }
 }

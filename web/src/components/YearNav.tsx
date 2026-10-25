@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, TextInput } from '../../components/ui'
-import { MAX_YEAR, MIN_YEAR, parseYear } from '../../lib/month'
+import { Button, TextInput } from './ui'
+import { MAX_YEAR, MIN_YEAR, parseYear } from '../lib/month'
 
 export default function YearNav({ year, onChange }: { year: number; onChange: (year: number) => void }) {
   const { t } = useTranslation()
@@ -15,12 +15,12 @@ export default function YearNav({ year, onChange }: { year: number; onChange: (y
 
   return (
     <div className="flex items-center gap-2">
-      <Button onClick={() => onChange(year - 1)} disabled={year <= MIN_YEAR} aria-label={t('summary.previous')}>
+      <Button onClick={() => onChange(year - 1)} disabled={year <= MIN_YEAR} aria-label={t('yearNav.previous')}>
         ‹
       </Button>
       <TextInput
         type="number"
-        aria-label={t('summary.year')}
+        aria-label={t('yearNav.year')}
         className="w-24 text-center tabular-nums"
         value={draft}
         onChange={(e) => {
@@ -30,7 +30,7 @@ export default function YearNav({ year, onChange }: { year: number; onChange: (y
         }}
         onBlur={() => setDraft(String(year))}
       />
-      <Button onClick={() => onChange(year + 1)} disabled={year >= MAX_YEAR} aria-label={t('summary.next')}>
+      <Button onClick={() => onChange(year + 1)} disabled={year >= MAX_YEAR} aria-label={t('yearNav.next')}>
         ›
       </Button>
     </div>
