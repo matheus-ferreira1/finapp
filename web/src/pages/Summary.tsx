@@ -37,7 +37,16 @@ export default function Summary() {
   return (
     <>
       <PageHeader title={t('nav.summary')}>
-        <YearNav year={year} onChange={(next) => setParams({ year: String(next) })} />
+        <YearNav year={year} onChange={(next) =>
+            setParams(
+              (current) => {
+                const updated = new URLSearchParams(current)
+                updated.set('year', String(next))
+                return updated
+              },
+              { replace: true },
+            )
+          } />
       </PageHeader>
 
       <ErrorMessage message={report.isError ? errorText(report.error) : null} />
@@ -46,7 +55,7 @@ export default function Summary() {
       {report.isSuccess &&
         SECTIONS.map(({ id, columns }) => (
           <Section key={id} id={`summary-${id}`} title={t(`summary.sections.${id}`)}>
-            <FiguresTable headingId={`summary-${id}`} year={year} months={report.data.months} columns={columns} />
+            <FiguresTable headingId={`summary-${id}`} year={report.data.year} months={report.data.months} columns={columns} />
           </Section>
         ))}
     </>

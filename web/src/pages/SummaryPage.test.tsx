@@ -128,6 +128,62 @@ describe('Year', () => {
   })
 })
 
+describe('Year input', () => {
+  it('goes back to the shown year when left with an incomplete one', async () => {
+    const { server, user } = await open()
+    await table('Bruto')
+
+    const input = screen.getByLabelText('Ano')
+    await user.clear(input)
+    await user.type(input, '202')
+    await user.tab()
+
+    expect(input).toHaveValue(2026)
+    expect(server.monthlyRequests).toEqual([2026])
+  })
+
+  it('keeps the focus while a year is typed', async () => {
+    const { user } = await open()
+    await table('Bruto')
+
+    const input = screen.getByLabelText('Ano')
+    await user.clear(input)
+    await user.type(input, '2024')
+
+    await waitFor(() => expect(screen.getByLabelText('Ano')).toHaveValue(2024))
+    expect(screen.getByLabelText('Ano')).toHaveFocus()
+  })
+
+  it('stops at the first and last supported years', async () => {
+    await open({ route: '/summary?year=1000' })
+    await table('Bruto')
+    expect(screen.getByRole('button', { name: 'Ano anterior' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Próximo ano' })).toBeEnabled()
+  })
+
+  it('stops at the last supported year', async () => {
+    await open({ route: '/summary?year=9999' })
+    await table('Bruto')
+    expect(screen.getByRole('button', { name: 'Próximo ano' })).toBeDisabled()
+  })
+
+  it('keeps the tables on screen while the next year loads', async () => {
+    const { user } = await open()
+    await table('Bruto')
+    const answering = fetch
+    vi.stubGlobal('fetch', (input: RequestInfo | URL, init?: RequestInit) =>
+      String(input).includes('year=2027') ? new Promise(() => {}) : answering(input, init),
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Próximo ano' }))
+
+    expect(screen.getByLabelText('Ano')).toHaveValue(2027)
+    // the rows still belong to the year they were loaded for
+    expect(monthRow(screen.getByRole('table', { name: 'Bruto' }), '01/2026')).toBeInTheDocument()
+    expect(screen.queryByText('Carregando…')).not.toBeInTheDocument()
+  })
+})
+
 describe('Gross and mine tables', () => {
   it('lists the twelve months with the planned and realized figures side by side', async () => {
     await open()

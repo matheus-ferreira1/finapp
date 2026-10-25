@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { api } from './api'
 
 export const queryKeys = {
@@ -25,4 +25,9 @@ export const useTransactions = (month: string) =>
 export const useRecurrences = () => useQuery({ queryKey: queryKeys.recurrences, queryFn: api.listRecurrences })
 
 export const useMonthlyReport = (year: number) =>
-  useQuery({ queryKey: [...queryKeys.monthlyReport, year], queryFn: () => api.monthlyReport(year) })
+  useQuery({
+    queryKey: [...queryKeys.monthlyReport, year],
+    queryFn: () => api.monthlyReport(year),
+    // keep the tables on screen while another year loads
+    placeholderData: keepPreviousData,
+  })

@@ -1,28 +1,36 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, TextInput } from '../../components/ui'
-import { parseYear } from '../../lib/month'
+import { MAX_YEAR, MIN_YEAR, parseYear } from '../../lib/month'
 
 export default function YearNav({ year, onChange }: { year: number; onChange: (year: number) => void }) {
   const { t } = useTranslation()
+  // What is being typed, which may not be a year yet; it only navigates once it is one.
+  const [draft, setDraft] = useState(String(year))
+  const [shown, setShown] = useState(year)
+  if (shown !== year) {
+    setShown(year)
+    setDraft(String(year))
+  }
 
   return (
     <div className="flex items-center gap-2">
-      <Button onClick={() => onChange(year - 1)} aria-label={t('summary.previous')}>
+      <Button onClick={() => onChange(year - 1)} disabled={year <= MIN_YEAR} aria-label={t('summary.previous')}>
         ‹
       </Button>
-      {/* Uncontrolled and keyed by the year, so typing 2, 20, 202 does not navigate before 2026 is complete. */}
       <TextInput
-        key={year}
         type="number"
         aria-label={t('summary.year')}
         className="w-24 text-center tabular-nums"
-        defaultValue={year}
+        value={draft}
         onChange={(e) => {
+          setDraft(e.target.value)
           const typed = parseYear(e.target.value)
           if (typed !== null) onChange(typed)
         }}
+        onBlur={() => setDraft(String(year))}
       />
-      <Button onClick={() => onChange(year + 1)} aria-label={t('summary.next')}>
+      <Button onClick={() => onChange(year + 1)} disabled={year >= MAX_YEAR} aria-label={t('summary.next')}>
         ›
       </Button>
     </div>

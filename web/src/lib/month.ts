@@ -31,6 +31,9 @@ export function todayISO(now: Date = new Date()): string {
   return `${currentMonth(now)}-${pad(now.getDate())}`
 }
 
+export const MIN_YEAR = 1000
+export const MAX_YEAR = 9999
+
 /** A four-digit year, or null when the value is not one. */
 export function parseYear(value: string | null): number | null {
   return value !== null && /^[1-9]\d{3}$/.test(value) ? Number(value) : null

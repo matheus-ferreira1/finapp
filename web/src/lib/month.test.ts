@@ -54,7 +54,7 @@ describe('parseYear', () => {
     expect(parseYear(value)).toBe(expected)
   })
 
-  it.each([null, '', '26', '202', '20260', '0999', 'abc', '2026-01', '-2026', '20.5'])('rejects %s', (value) => {
+  it.each([null, '', '26', '999', '10000', '202', '20260', '0999', 'abc', '2026-01', '-2026', '20.5'])('rejects %s', (value) => {
     expect(parseYear(value)).toBeNull()
   })
 })
