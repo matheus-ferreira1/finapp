@@ -1,7 +1,7 @@
 .PHONY: dev dev-api dev-web web test test-go test-web lint build clean
 
 dev-api:
-	go run ./cmd/finapp
+	go run ./cmd/finapp --db ./dev.db --no-browser
 
 dev-web:
 	cd web && npm run dev
