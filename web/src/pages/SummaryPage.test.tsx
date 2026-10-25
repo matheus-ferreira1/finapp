@@ -219,6 +219,12 @@ describe('Gross and mine tables', () => {
     expect(february[1]).not.toHaveClass('text-red-700') // expenses are not a balance
   })
 
+  it.each(['Bruto', 'Meu', 'Saldo a acertar'])('never wraps the text of the %s table, so it scrolls instead', async (name) => {
+    await open()
+
+    expect(await table(name)).toHaveClass('whitespace-nowrap')
+  })
+
   it('shows my share in its own table', async () => {
     await open()
     const mine = await table('Meu')

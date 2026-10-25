@@ -28,7 +28,7 @@ export default function FiguresTable({ headingId, year, months, columns }: Props
 
   return (
     <div className="overflow-x-auto">
-      <table aria-labelledby={headingId} className="w-full min-w-[40rem] border-collapse text-right tabular-nums">
+      <table aria-labelledby={headingId} className="w-full min-w-[40rem] border-collapse whitespace-nowrap text-right tabular-nums">
         <thead>
           <tr className="text-xs font-medium text-slate-500">
             <th scope="col" rowSpan={2} className="px-2 py-2 text-left align-bottom font-medium">
