@@ -96,6 +96,7 @@ func TestStaticAndHealth(t *testing.T) {
 		wantContains string
 	}{
 		{"health check", "/api/health", http.StatusOK, `"status":"ok"`},
+		{"health check names the app", "/api/health", http.StatusOK, `"app":"finapp"`},
 		{"unknown api route", "/api/nope", http.StatusNotFound, ""},
 		{"static asset", "/assets/app.js", http.StatusOK, "console.log"},
 		{"root serves index", "/", http.StatusOK, "spa"},

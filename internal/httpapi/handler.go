@@ -10,6 +10,10 @@ import (
 	"github.com/matheus-ferreira1/finapp/internal/app"
 )
 
+// AppName identifies this server in the health check, so a second launch can
+// tell a running finapp from any other service on the same port.
+const AppName = "finapp"
+
 // NewHandler returns the root handler: /api/* routes plus the SPA served from static.
 func NewHandler(svc *app.Service, static fs.FS) http.Handler {
 	a := &api{svc: svc}
@@ -48,7 +52,7 @@ func NewHandler(svc *app.Service, static fs.FS) http.Handler {
 }
 
 func health(w http.ResponseWriter, _ *http.Request) {
-	writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+	writeJSON(w, http.StatusOK, map[string]string{"app": AppName, "status": "ok"})
 }
 
 func writeJSON(w http.ResponseWriter, status int, v any) {
