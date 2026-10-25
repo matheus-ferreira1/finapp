@@ -1,0 +1,43 @@
+version: 2
+
+# The web app must be built before GoReleaser runs (see .github/workflows/release.yml);
+# `go:embed` picks up web/dist at compile time.
+before:
+  hooks:
+    - go test ./...
+
+builds:
+  - main: ./cmd/finapp
+    binary: finapp
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin, linux, windows]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:'
+    - title: Fixes
+      regexp: '^.*?fix(\(.+\))??!?:'
+    - title: Others
+  filters:
+    exclude:
+      - '^(docs|chore|ci)(\(.+\))?!?:'
