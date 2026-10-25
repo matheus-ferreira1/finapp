@@ -25,7 +25,8 @@
   "common": {
     "name": "Name",
     "archived": "Archived",
-    "empty": "Nothing here yet."
+    "empty": "Nothing here yet.",
+    "loading": "Loading…"
   },
   "settings": {
     "general": {
@@ -51,6 +52,30 @@
       "editPercent": "Rule's my share (%)",
       "invalidPercent": "My share must be a whole number between 0 and 100.",
       "hint": "Define how a shared expense is divided. The percent of a rule already in use cannot change: archive it and create another."
+    }
+  },
+  "summary": {
+    "year": "Year",
+    "previous": "Previous year",
+    "next": "Next year",
+    "sections": {
+      "gross": "Gross",
+      "mine": "Mine",
+      "settlement": "Amount to settle"
+    },
+    "scopes": {
+      "planned": "Planned",
+      "realized": "Realized"
+    },
+    "columns": {
+      "month": "Month",
+      "income": "Income",
+      "expense": "Expenses",
+      "balance": "Balance",
+      "shared": "Shared",
+      "settled": "Settlements",
+      "owed": "Month balance",
+      "owedToDate": "To date"
     }
   },
   "transactions": {

@@ -25,7 +25,8 @@
   "common": {
     "name": "Nome",
     "archived": "Arquivada",
-    "empty": "Nada cadastrado ainda."
+    "empty": "Nada cadastrado ainda.",
+    "loading": "Carregando…"
   },
   "settings": {
     "general": {
@@ -51,6 +52,30 @@
       "editPercent": "Minha parte da regra (%)",
       "invalidPercent": "A minha parte deve ser um número inteiro entre 0 e 100.",
       "hint": "Defina como um gasto compartilhado é dividido. O percentual de uma regra já usada não pode mudar: arquive-a e crie outra."
+    }
+  },
+  "summary": {
+    "year": "Ano",
+    "previous": "Ano anterior",
+    "next": "Próximo ano",
+    "sections": {
+      "gross": "Bruto",
+      "mine": "Meu",
+      "settlement": "Saldo a acertar"
+    },
+    "scopes": {
+      "planned": "Previsto",
+      "realized": "Realizado"
+    },
+    "columns": {
+      "month": "Mês",
+      "income": "Receitas",
+      "expense": "Despesas",
+      "balance": "Balanço",
+      "shared": "Compartilhado",
+      "settled": "Acertos",
+      "owed": "Saldo do mês",
+      "owedToDate": "Acumulado"
     }
   },
   "transactions": {
