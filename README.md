@@ -27,7 +27,7 @@ Double-clicking the binary on macOS opens it in Terminal; closing that window st
 ## Importing data
 
 There is no import feature in the app. Start finapp once so it creates the database, stop it, then load your data with
-`sqlite3 finapp.db < import.sql`. Tables, columns and rules are documented in [docs/schema.md](docs/schema.md).
+`sqlite3 <path to finapp.db> < import.sql` (the file next to the executable, or the path you gave with `--db`). Tables, columns and rules are documented in [docs/schema.md](docs/schema.md).
 
 ## Architecture
 

@@ -4,7 +4,6 @@ version: 2
 # `go:embed` picks up web/dist at compile time.
 before:
   hooks:
-    - go mod tidy
     - go test ./...
 
 builds:
@@ -41,6 +40,4 @@ changelog:
     - title: Others
   filters:
     exclude:
-      - '^docs:'
-      - '^chore:'
-      - '^ci:'
+      - '^(docs|chore|ci)(\(.+\))?!?:'
