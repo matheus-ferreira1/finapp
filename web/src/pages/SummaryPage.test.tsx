@@ -219,6 +219,15 @@ describe('Gross and mine tables', () => {
     expect(february[1]).not.toHaveClass('text-red-700') // expenses are not a balance
   })
 
+  it('never wraps an amount, so a narrow screen scrolls instead', async () => {
+    await open()
+    const gross = await table('Bruto')
+
+    for (const cell of within(monthRow(gross, '02/2026')).getAllByRole('cell')) {
+      expect(cell).toHaveClass('whitespace-nowrap')
+    }
+  })
+
   it('shows my share in its own table', async () => {
     await open()
     const mine = await table('Meu')

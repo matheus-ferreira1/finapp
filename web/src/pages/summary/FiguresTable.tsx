@@ -62,7 +62,7 @@ export default function FiguresTable({ headingId, year, months, columns }: Props
         <tbody>
           {months.map((summary) => (
             <tr key={summary.month} className="border-t border-slate-100 hover:bg-slate-50 dark:border-slate-900 dark:hover:bg-slate-900">
-              <th scope="row" className="px-2 py-1.5 text-left text-sm font-medium">
+              <th scope="row" className="whitespace-nowrap px-2 py-1.5 text-left text-sm font-medium">
                 {formatMonthYear(year, summary.month)}
               </th>
               {SCOPES.flatMap((scope) =>
@@ -73,7 +73,7 @@ export default function FiguresTable({ headingId, year, months, columns }: Props
                     <td
                       key={`${scope}-${column.key}`}
                       className={[
-                        'px-2 py-1.5 text-sm',
+                        'whitespace-nowrap px-2 py-1.5 text-sm',
                         i === 0 ? 'border-l border-slate-200 dark:border-slate-800' : '',
                         negative ? 'text-red-700 dark:text-red-300' : '',
                       ].join(' ')}
