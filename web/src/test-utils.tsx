@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import type { Category, MonthSummary, Recurrence, RecurrenceInput, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
+import type { Category, CategoryReportRow, CategoryReportView, CategoryReportScope, MonthSummary, Recurrence, RecurrenceInput, Settings, SplitRule, Transaction, TransactionInput } from './lib/api'
 
 export const defaultSettings: Settings = { partner_name: '', currency: 'BRL', locale: 'pt-BR' }
 
@@ -36,6 +36,12 @@ export interface FakeServerState {
   monthlyFailure: string | null
   /** The years asked of the monthly report, in order. */
   monthlyRequests: number[]
+  /** What the category report returns for any query; the server does not recompute it from the transactions. */
+  categoryRows: CategoryReportRow[]
+  /** When set, the category report fails with this message. */
+  categoryReportFailure: string | null
+  /** The queries made to the category report, in order. */
+  categoryReportRequests: { year: number; view: CategoryReportView; scope: CategoryReportScope }[]
   /** Every non-GET request received, in order. */
   writes: { method: string; path: string; body: unknown }[]
 }
@@ -56,6 +62,9 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
     monthly: [],
     monthlyFailure: null,
     monthlyRequests: [],
+    categoryRows: [],
+    categoryReportFailure: null,
+    categoryReportRequests: [],
     writes: [],
     ...initial,
   }
@@ -205,6 +214,15 @@ export function stubServer(initial: Partial<FakeServerState> = {}) {
       state.monthlyRequests.push(year)
       if (state.monthlyFailure) return json(500, { error: state.monthlyFailure })
       return json(200, { year, months: state.monthly })
+    }
+
+    if (path === '/api/reports/categories' && method === 'GET') {
+      const year = Number(url.searchParams.get('year'))
+      const view = (url.searchParams.get('view') ?? 'gross') as CategoryReportView
+      const scope = (url.searchParams.get('scope') ?? 'all') as CategoryReportScope
+      state.categoryReportRequests.push({ year, view, scope })
+      if (state.categoryReportFailure) return json(500, { error: state.categoryReportFailure })
+      return json(200, { year, view, scope, rows: state.categoryRows })
     }
 
     if (path === '/api/split-rules' && method === 'GET') {

@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
+import YearNav from '../components/YearNav'
 import { ErrorMessage, Section } from '../components/ui'
 import type { Figures } from '../lib/api'
 import { currentYear, parseYear } from '../lib/month'
 import { errorText, useMonthlyReport } from '../lib/queries'
 import FiguresTable, { type FigureColumn } from './summary/FiguresTable'
-import YearNav from './summary/YearNav'
 
 const totalsColumns = (view: 'gross' | 'mine'): FigureColumn[] => [
   { key: 'income', amount: (f: Figures) => f[view].income_cents },

@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { api } from './api'
+import { api, type CategoryReportScope, type CategoryReportView } from './api'
 
 export const queryKeys = {
   settings: ['settings'] as const,
@@ -8,6 +8,7 @@ export const queryKeys = {
   transactions: ['transactions'] as const,
   recurrences: ['recurrences'] as const,
   monthlyReport: ['monthly-report'] as const,
+  categoryReport: ['category-report'] as const,
 }
 
 export const useCategories = () => useQuery({ queryKey: queryKeys.categories, queryFn: api.listCategories })
@@ -29,5 +30,13 @@ export const useMonthlyReport = (year: number) =>
     queryKey: [...queryKeys.monthlyReport, year],
     queryFn: () => api.monthlyReport(year),
     // keep the tables on screen while another year loads
+    placeholderData: keepPreviousData,
+  })
+
+export const useCategoryReport = (year: number, view: CategoryReportView, scope: CategoryReportScope) =>
+  useQuery({
+    queryKey: [...queryKeys.categoryReport, year, view, scope],
+    queryFn: () => api.categoryReport(year, view, scope),
+    // keep the table on screen while another year or option loads
     placeholderData: keepPreviousData,
   })

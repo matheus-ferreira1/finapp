@@ -55,9 +55,6 @@
     }
   },
   "summary": {
-    "year": "Year",
-    "previous": "Previous year",
-    "next": "Next year",
     "sections": {
       "gross": "Gross",
       "mine": "Mine",
@@ -149,6 +146,28 @@
       "invalidDay": "Enter a day between 1 and 31.",
       "descriptionRequired": "Enter a description.",
       "invalidAmount": "Enter an amount greater than zero."
+    }
+  },
+  "yearNav": {
+    "year": "Year",
+    "previous": "Previous year",
+    "next": "Next year"
+  },
+  "spending": {
+    "view": "View",
+    "scope": "Amounts",
+    "empty": "No spending this year.",
+    "views": {
+      "gross": "Gross",
+      "mine": "Mine"
+    },
+    "scopes": {
+      "all": "Planned",
+      "confirmed": "Realized"
+    },
+    "columns": {
+      "category": "Category",
+      "total": "Total"
     }
   }
 }
