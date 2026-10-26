@@ -8,6 +8,8 @@ stays in one SQLite file on your machine.
 
 Sample data, default pt-BR interface (English is available in the settings).
 
+![Transactions ("Lançamentos"): inline-editable grid for the month, with the first columns shown](docs/screenshots/transactions.png)
+
 ![Monthly summary ("Resumo Mensal"): gross income, expenses and balance per month, planned vs realized](docs/screenshots/summary.png)
 
 ![Spending by category ("Gastos por Categoria"): expense totals per category and month](docs/screenshots/spending.png)
