@@ -42,9 +42,9 @@ export default function TransactionFields({ draft, categories, splitRules, onCha
 
   return (
     <>
-      <td className="w-36 p-0.5">{text('date', t('transactions.columns.date'), { type: 'date' })}</td>
+      <td className="min-w-36 p-0.5">{text('date', t('transactions.columns.date'), { type: 'date' })}</td>
       <td className="min-w-48 p-0.5">{text('description', t('transactions.columns.description'))}</td>
-      <td className="w-28 p-0.5">
+      <td className="min-w-28 p-0.5">
         <select
           aria-label={t('transactions.columns.type')}
           className={CELL}
@@ -74,8 +74,8 @@ export default function TransactionFields({ draft, categories, splitRules, onCha
           ))}
         </select>
       </td>
-      <td className="w-32 p-0.5">{text('amount', t('transactions.columns.amount'), { inputMode: 'decimal', className: `${CELL} text-right` })}</td>
-      <td className="w-36 p-0.5">
+      <td className="min-w-32 p-0.5">{text('amount', t('transactions.columns.amount'), { inputMode: 'decimal', className: `${CELL} text-right` })}</td>
+      <td className="min-w-36 p-0.5">
         <select
           aria-label={t('transactions.columns.split')}
           className={CELL}
@@ -91,8 +91,8 @@ export default function TransactionFields({ draft, categories, splitRules, onCha
           ))}
         </select>
       </td>
-      <td className="w-24 p-0.5">{text('installment', t('transactions.columns.installment'), { placeholder: '2/12' })}</td>
-      <td className="w-24 p-0.5 text-center">
+      <td className="min-w-24 p-0.5">{text('installment', t('transactions.columns.installment'), { placeholder: '2/12' })}</td>
+      <td className="min-w-24 p-0.5 text-center">
         <input
           type="checkbox"
           aria-label={t('transactions.columns.confirmed')}

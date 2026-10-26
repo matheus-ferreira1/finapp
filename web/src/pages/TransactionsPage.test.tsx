@@ -81,6 +81,17 @@ describe('Listing', () => {
     expect(within(rent).getAllByText('R$ 750,00')).toHaveLength(2) // my amount and shared amount
   })
 
+  it('keeps every editable column at a readable width, scrolling instead of squeezing', async () => {
+    await open()
+    const rent = await row('Aluguel')
+
+    for (const label of ['Data', 'Descrição', 'Tipo', 'Categoria', 'Valor', 'Compartilhamento', 'Parcela', 'Confirmado']) {
+      const cell = within(rent).getByLabelText(label).closest('td')
+      expect(cell?.className, label).toMatch(/(^|\s)min-w-/)
+      expect(cell?.className, label).not.toMatch(/(^|\s)w-\d/)
+    }
+  })
+
   it('totals the month in the footer', async () => {
     await open()
     await row('Aluguel')
