@@ -20,8 +20,8 @@ describe('categoryColor', () => {
     expect(CATEGORY_PALETTE).toContain(categoryColor(-3))
   })
 
-  it('has ten distinct hues', () => {
-    expect(new Set(CATEGORY_PALETTE).size).toBe(10)
+  it('has eight distinct hues', () => {
+    expect(new Set(CATEGORY_PALETTE).size).toBe(8)
   })
 
   it('falls back to a neutral colour for a missing category', () => {

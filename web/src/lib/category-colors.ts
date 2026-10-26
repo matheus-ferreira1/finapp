@@ -1,18 +1,18 @@
 /**
- * Ten saturated hues, readable on both the light and the dark page. They are CSS variables
+ * The eight validated categorical hues (dataviz palette: lightness band, colour-blind separation and
+ * normal-vision separation checked on both surfaces). Colour is never the only cue: charts always
+ * carry a legend and a table. They are CSS variables
  * (defined in index.css) so each theme can tune its own shade.
  */
 export const CATEGORY_PALETTE = [
-  'var(--cat-mango)',
-  'var(--cat-jambo)',
-  'var(--cat-acai)',
-  'var(--cat-sky)',
-  'var(--cat-lime)',
-  'var(--cat-coral)',
-  'var(--cat-teal)',
-  'var(--cat-cobalt)',
-  'var(--cat-papaya)',
-  'var(--cat-olive)',
+  'var(--cat-blue)',
+  'var(--cat-orange)',
+  'var(--cat-aqua)',
+  'var(--cat-yellow)',
+  'var(--cat-magenta)',
+  'var(--cat-green)',
+  'var(--cat-violet)',
+  'var(--cat-red)',
 ] as const
 
 /**

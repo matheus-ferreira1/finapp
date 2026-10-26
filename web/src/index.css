@@ -19,16 +19,14 @@
   --shared: #7b61ff;
   --owed: #ffb020;
 
-  --cat-mango: #ff9f1c;
-  --cat-jambo: #e5389b;
-  --cat-acai: #7b3fe4;
-  --cat-sky: #2ea8ff;
-  --cat-lime: #7ac70c;
-  --cat-coral: #ff5d4d;
-  --cat-teal: #00b3a4;
-  --cat-cobalt: #3a56e8;
-  --cat-papaya: #ff7a9c;
-  --cat-olive: #9a8c1f;
+  --cat-blue: #2a78d6;
+  --cat-orange: #eb6834;
+  --cat-aqua: #1baf7a;
+  --cat-yellow: #eda100;
+  --cat-magenta: #e87ba4;
+  --cat-green: #008300;
+  --cat-violet: #6250d6;
+  --cat-red: #e34948;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,16 +41,14 @@
     --shared: #9c88ff;
     --owed: #ffc14d;
 
-    --cat-mango: #ffb23d;
-    --cat-jambo: #ff5cb8;
-    --cat-acai: #a47bff;
-    --cat-sky: #5cbcff;
-    --cat-lime: #95de2e;
-    --cat-coral: #ff7a6c;
-    --cat-teal: #2fd6c6;
-    --cat-cobalt: #7088ff;
-    --cat-papaya: #ff94b0;
-    --cat-olive: #c2b43a;
+    --cat-blue: #3987e5;
+    --cat-orange: #d95926;
+    --cat-aqua: #199e70;
+    --cat-yellow: #c98500;
+    --cat-magenta: #d55181;
+    --cat-green: #008300;
+    --cat-violet: #9085e9;
+    --cat-red: #e66767;
   }
 }
 
@@ -100,4 +96,19 @@ h3 {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* The money flow draws itself in once; paths carry pathLength="1". */
+@keyframes flow-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.flow-draw {
+  stroke-dasharray: 1;
+  animation: flow-draw 900ms ease-out both;
 }
