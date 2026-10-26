@@ -13,9 +13,10 @@ interface Props {
 
 /** A tiny trend line with no axes, to sit beside a figure. */
 export default function Sparkline({ values, color, label }: Props) {
+  const min = Math.min(0, ...values)
   const max = Math.max(1, ...values)
   const step = values.length > 1 ? (WIDTH - 2 * PAD) / (values.length - 1) : 0
-  const y = (v: number) => HEIGHT - PAD - (v / max) * (HEIGHT - 2 * PAD)
+  const y = (v: number) => HEIGHT - PAD - ((v - min) / (max - min)) * (HEIGHT - 2 * PAD)
   const path = line<number>().x((_, i) => PAD + i * step).y(y)(values)
   const last = values.length - 1
 

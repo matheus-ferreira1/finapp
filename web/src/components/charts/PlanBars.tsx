@@ -41,7 +41,8 @@ export default function PlanBars({ bars, color, label, legend, format, formatTic
           const left = x(bar.month) ?? 0
           const realizedTop = y(bar.realized)
           const pendingTop = y(bar.realized + bar.pending)
-          const pendingHeight = Math.max(0, realizedTop - GAP - pendingTop)
+          const gap = bar.realized > 0 ? GAP : 0
+          const pendingHeight = Math.max(0, realizedTop - gap - pendingTop)
           const total = bar.realized + bar.pending
           const hover = bind({
             x: left + x.bandwidth() / 2,
@@ -70,10 +71,11 @@ export default function PlanBars({ bars, color, label, legend, format, formatTic
           {legend.realized}
         </span>
         <span className="flex items-center gap-1.5">
-          <svg aria-hidden width="10" height="10">
-            <defs>{hatch.defs}</defs>
-            <rect width="10" height="10" rx="2" fill={hatch.fill} stroke={color} />
-          </svg>
+          <span
+            aria-hidden
+            className="size-2.5 rounded-sm"
+            style={{ border: `1px solid ${color}`, backgroundImage: `repeating-linear-gradient(135deg, ${color} 0 1px, transparent 1px 3px)` }}
+          />
           {legend.pending}
         </span>
       </figcaption>

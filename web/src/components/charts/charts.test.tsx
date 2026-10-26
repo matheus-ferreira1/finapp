@@ -54,6 +54,36 @@ describe('PlanBars', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
   })
 
+  it('dismisses the tooltip with Escape', () => {
+    renderBars()
+    const month = screen.getByLabelText('M1: $1000.00')
+    fireEvent.focus(month)
+
+    fireEvent.keyDown(month, { key: 'Escape' })
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+  })
+
+  it('keeps the tooltip of the focused month when the pointer leaves another one', () => {
+    renderBars()
+    fireEvent.focus(screen.getByLabelText('M1: $1000.00'))
+    const other = screen.getByLabelText('M3: $300.00')
+
+    fireEvent.mouseEnter(other)
+    fireEvent.mouseLeave(other)
+
+    expect(screen.getByRole('tooltip')).toHaveTextContent('M1')
+  })
+
+  it('sits a month with nothing realized directly on the baseline', () => {
+    const { container } = render(
+      <PlanBars bars={[{ month: 1, realized: 0, pending: 50000 }]} color="var(--income)" label="x" legend={{ realized: 'R', pending: 'P' }} {...shared} />,
+    )
+    const hatched = container.querySelector('svg[role="group"] path[fill^="url(#hatch-"]')
+    // the path starts at the bottom edge of the bar: the chart is 240 high with a 28 bottom margin
+    expect(hatched?.getAttribute('d')).toMatch(/^M[\d.]+,212 /)
+  })
+
   it('explains the solid and hatched marks in a legend', () => {
     renderBars()
     expect(screen.getByText('Realized')).toBeInTheDocument()
@@ -121,6 +151,15 @@ describe('Sparkline', () => {
     expect(screen.getByRole('img', { name: 'Housing, last 3 months' })).toBeInTheDocument()
   })
 
+  it('keeps negative values inside the drawing', () => {
+    const { container } = render(<Sparkline values={[-500, 100, 300]} color="var(--cat-blue)" label="Owed" />)
+    const dot = container.querySelector('circle')
+    expect(Number(dot?.getAttribute('cy'))).toBeGreaterThanOrEqual(0)
+    const path = container.querySelector('path')?.getAttribute('d') ?? ''
+    const ys = [...path.matchAll(/,(-?[\d.]+)/g)].map((m) => Number(m[1]))
+    expect(ys.every((y) => y >= 0 && y <= 28)).toBe(true)
+  })
+
   it('copes with a single value', () => {
     render(<Sparkline values={[5]} color="var(--cat-blue)" label="One month" />)
     expect(screen.getByRole('img', { name: 'One month' })).toBeInTheDocument()
@@ -174,7 +213,7 @@ describe('FlowChart', () => {
     render(<FlowChart flow={flow} {...props} />)
 
     fireEvent.focus(screen.getByLabelText('Salary → Housing: $600.00'))
-    expect(screen.getByRole('tooltip')).toHaveTextContent('Salary → Housing')
+    expect(screen.getByRole('tooltip')).toHaveTextContent('SalaryHousing$600.00')
   })
 
   it('draws the ribbons in only when asked to', () => {
