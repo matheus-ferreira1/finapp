@@ -4,6 +4,12 @@ A local-first personal finance app that replaces a spreadsheet. A single binary
 (Go + SQLite + embedded React app): run it and it opens in your browser. Your data
 stays in one SQLite file on your machine.
 
+## Screenshots
+
+![Monthly summary](docs/screenshots/summary.png)
+
+![Spending by category](docs/screenshots/spending.png)
+
 ## Running
 
 Run `./finapp`: it starts a local server and opens your browser. Closing the terminal stops it.
