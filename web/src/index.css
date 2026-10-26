@@ -1,16 +1,103 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/bricolage-grotesque/wdth.css';
+@import '@fontsource-variable/onest';
 
+/*
+ * Feira design tokens. Components use the semantic colours (bg-paper, text-ink, text-income...)
+ * and never need a dark: variant: the theme switches the variables below.
+ */
 :root {
   color-scheme: light dark;
+
+  --paper: #f6f7fb;
+  --surface: #ffffff;
+  --ink: #1b1446;
+  --ink-muted: #6b6690;
+  --line: rgb(27 20 70 / 0.1);
+  --income: #007d68;
+  --expense: #d0233f;
+  --shared: #7b61ff;
+  --owed: #ffb020;
+
+  --cat-mango: #ff9f1c;
+  --cat-jambo: #e5389b;
+  --cat-acai: #7b3fe4;
+  --cat-sky: #2ea8ff;
+  --cat-lime: #7ac70c;
+  --cat-coral: #ff5d4d;
+  --cat-teal: #00b3a4;
+  --cat-cobalt: #3a56e8;
+  --cat-papaya: #ff7a9c;
+  --cat-olive: #9a8c1f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14122b;
+    --surface: #1e1b3d;
+    --ink: #eceaff;
+    --ink-muted: #9b97c4;
+    --line: rgb(236 234 255 / 0.12);
+    --income: #2dd4b0;
+    --expense: #ff7088;
+    --shared: #9c88ff;
+    --owed: #ffc14d;
+
+    --cat-mango: #ffb23d;
+    --cat-jambo: #ff5cb8;
+    --cat-acai: #a47bff;
+    --cat-sky: #5cbcff;
+    --cat-lime: #95de2e;
+    --cat-coral: #ff7a6c;
+    --cat-teal: #2fd6c6;
+    --cat-cobalt: #7088ff;
+    --cat-papaya: #ff94b0;
+    --cat-olive: #c2b43a;
+  }
+}
+
+@theme {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-income: var(--income);
+  --color-expense: var(--expense);
+  --color-shared: var(--shared);
+  --color-owed: var(--owed);
+
+  --font-sans: 'Onest Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Onest Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-panel: 1rem;
+  --radius-control: 0.5rem;
 }
 
 body {
   margin: 0;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 100;
+}
+
+:focus-visible {
+  outline: 2px solid var(--shared);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

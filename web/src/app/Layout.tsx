@@ -1,21 +1,22 @@
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet } from 'react-router-dom'
+import { Button } from '../components/ui'
 import { useSettings } from './settings-context'
 
+// 24x24 stroke paths, one per destination.
 const TABS = [
-  { to: '/transactions', key: 'nav.transactions' },
-  { to: '/summary', key: 'nav.summary' },
-  { to: '/spending', key: 'nav.spending' },
-  { to: '/recurrences', key: 'nav.recurrences' },
-  { to: '/settings', key: 'nav.settings' },
+  { to: '/transactions', key: 'nav.transactions', icon: 'M4 6h16M4 12h16M4 18h10' },
+  { to: '/summary', key: 'nav.summary', icon: 'M5 20V10M12 20V4M19 20v-7' },
+  { to: '/spending', key: 'nav.spending', icon: 'M12 3a9 9 0 1 0 9 9h-9V3z' },
+  { to: '/recurrences', key: 'nav.recurrences', icon: 'M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2M20 4v5h-5M4 20v-5h5' },
+  { to: '/settings', key: 'nav.settings', icon: 'M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6' },
 ] as const
 
 const tabClass = ({ isActive }: { isActive: boolean }) =>
   [
-    'whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium transition-colors',
-    isActive
-      ? 'border-emerald-600 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300'
-      : 'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-100',
+    'flex items-center gap-3 rounded-control px-3 py-2 text-sm font-medium transition-colors',
+    'max-md:flex-1 max-md:flex-col max-md:gap-0.5 max-md:px-1 max-md:text-xs',
+    isActive ? 'bg-ink text-paper' : 'text-ink-muted hover:bg-ink/5 hover:text-ink',
   ].join(' ')
 
 export default function Layout() {
@@ -23,39 +24,36 @@ export default function Layout() {
   const { error, retry } = useSettings()
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <header className="border-b border-slate-200 dark:border-slate-800">
-        <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 pt-3 sm:flex-row sm:items-end sm:gap-8">
-          <span className="pb-2 text-lg font-semibold tracking-tight">{t('app.name')}</span>
-          <nav aria-label={t('nav.label')} className="-mb-px flex gap-1 overflow-x-auto">
-            {TABS.map(({ to, key }) => (
-              <NavLink key={to} to={to} className={tabClass}>
-                {t(key)}
-              </NavLink>
-            ))}
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-paper text-ink md:grid md:grid-cols-[14rem_1fr]">
+      <aside className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-surface p-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] md:sticky md:top-0 md:h-screen md:border-t-0 md:border-r md:p-4">
+        <span className="mb-6 hidden font-display text-2xl font-bold tracking-tight md:block">{t('app.name')}</span>
+        <nav aria-label={t('nav.label')} className="flex gap-1 md:flex-col">
+          {TABS.map(({ to, key, icon }) => (
+            <NavLink key={to} to={to} className={tabClass}>
+              <svg aria-hidden viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d={icon} />
+              </svg>
+              <span className="max-md:truncate">{t(key)}</span>
+            </NavLink>
+          ))}
+        </nav>
+      </aside>
 
-      {error && (
-        <div
-          role="alert"
-          className="mx-auto mt-4 flex max-w-6xl items-center justify-between gap-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200"
-        >
-          <span>{t('errors.server')}</span>
-          <button
-            type="button"
-            onClick={retry}
-            className="rounded border border-red-300 px-3 py-1 font-medium hover:bg-red-100 dark:border-red-800 dark:hover:bg-red-900"
+      <div className="min-w-0 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
+        {error && (
+          <div
+            role="alert"
+            className="mx-auto mt-4 flex max-w-6xl items-center justify-between gap-4 rounded-panel bg-expense/10 px-4 py-3 text-sm font-medium text-expense ring-1 ring-expense/30"
           >
-            {t('actions.retry')}
-          </button>
-        </div>
-      )}
+            <span>{t('errors.server')}</span>
+            <Button onClick={retry}>{t('actions.retry')}</Button>
+          </div>
+        )}
 
-      <main className="mx-auto max-w-6xl px-4 py-6">
-        <Outlet />
-      </main>
+        <main className="mx-auto max-w-6xl px-4 py-8 md:px-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }
