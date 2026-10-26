@@ -1,6 +1,12 @@
-.PHONY: dev dev-api dev-web web test test-go test-web lint build clean
+.PHONY: dev dev-api dev-web seed web test test-go test-web lint build clean
 
+# Recreates ./dev.db with sample data.
+seed:
+	go run ./cmd/finapp-seed --db ./dev.db --force
+
+# Seeds ./dev.db with sample data on the first run only, so your edits are kept.
 dev-api:
+	go run ./cmd/finapp-seed --db ./dev.db
 	go run ./cmd/finapp --db ./dev.db --no-browser
 
 dev-web:

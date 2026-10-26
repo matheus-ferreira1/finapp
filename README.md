@@ -50,7 +50,8 @@ driver, so there is no CGO and the binary is portable. Business rules sit in `in
 Requirements: Go 1.26+ and Node 22+.
 
 ```sh
-make dev     # API on :8080 (database ./dev.db) and Vite dev server with /api proxy
+make dev     # API on :8080 (database ./dev.db, seeded with sample data on first run) and Vite dev server with /api proxy
+make seed    # recreate ./dev.db with fresh sample data
 make test    # Go and web tests
 make lint
 make build   # produces ./finapp with the web app embedded
