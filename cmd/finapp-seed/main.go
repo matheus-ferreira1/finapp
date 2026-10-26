@@ -26,19 +26,29 @@ func run() error {
 	force := flag.Bool("force", false, "delete the database first and recreate it")
 	flag.Parse()
 
+	_, statErr := os.Stat(*dbPath)
+	existed := statErr == nil
+	if statErr != nil && !errors.Is(statErr, os.ErrNotExist) {
+		return statErr
+	}
 	if *force {
 		if err := removeDatabase(*dbPath); err != nil {
 			return err
 		}
-	} else if _, err := os.Stat(*dbPath); err == nil {
-		log.Printf("%s already exists, skipping (use --force to recreate it)", *dbPath)
-		return nil
-	} else if !errors.Is(err, os.ErrNotExist) {
-		return err
+		existed = false
 	}
 
-	if err := populate(*dbPath); err != nil {
-		_ = removeDatabase(*dbPath) // never leave a half-seeded database behind
+	err := populate(*dbPath)
+	switch {
+	case errors.Is(err, seed.ErrNotEmpty):
+		log.Printf("%s already has data, skipping (use --force to recreate it)", *dbPath)
+		return nil
+	case err != nil:
+		if !existed { // never leave a half-seeded database behind, but keep one that was already there
+			if rmErr := removeDatabase(*dbPath); rmErr != nil {
+				err = errors.Join(err, rmErr)
+			}
+		}
 		return err
 	}
 	log.Printf("seeded %s", *dbPath)

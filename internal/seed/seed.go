@@ -21,7 +21,7 @@ const monthsToSeed = 6
 // now's month. Past months are confirmed; in the current month only what is due by now
 // is. The data is the same on every run, only the dates move with now.
 func Run(ctx context.Context, svc *app.Service, now time.Time) error {
-	if err := ensureEmpty(ctx, svc); err != nil {
+	if err := ensureEmpty(ctx, svc, now); err != nil {
 		return err
 	}
 	s := &seeder{ctx: ctx, svc: svc, today: truncateDay(now)}
@@ -37,7 +37,9 @@ type seeder struct {
 	rules      map[string]*domain.SplitRule
 }
 
-func ensureEmpty(ctx context.Context, svc *app.Service) error {
+// ensureEmpty fails with ErrNotEmpty when the database holds anything of the user's:
+// catalog entries, a partner name, or transactions in the months about to be seeded.
+func ensureEmpty(ctx context.Context, svc *app.Service, now time.Time) error {
 	categories, err := svc.ListCategories(ctx, true)
 	if err != nil {
 		return err
@@ -50,8 +52,21 @@ func ensureEmpty(ctx context.Context, svc *app.Service) error {
 	if err != nil {
 		return err
 	}
-	if len(categories)+len(rules)+len(recurrences) > 0 {
+	settings, err := svc.Settings(ctx)
+	if err != nil {
+		return err
+	}
+	if len(categories)+len(rules)+len(recurrences) > 0 || settings["partner_name"] != "" {
 		return ErrNotEmpty
+	}
+	for i := 0; i < monthsToSeed; i++ {
+		txs, err := svc.ListTransactions(ctx, monthAt(now, i))
+		if err != nil {
+			return err
+		}
+		if len(txs) > 0 {
+			return ErrNotEmpty
+		}
 	}
 	return nil
 }
@@ -205,8 +220,10 @@ func (s *seeder) seedMonths() error {
 }
 
 // monthAt returns the i-th seeded month, 0 being the oldest and the last the current one.
-func (s *seeder) monthAt(i int) domain.YearMonth {
-	t := time.Date(s.today.Year(), s.today.Month()-time.Month(monthsToSeed-1-i), 1, 0, 0, 0, 0, time.UTC)
+func (s *seeder) monthAt(i int) domain.YearMonth { return monthAt(s.today, i) }
+
+func monthAt(now time.Time, i int) domain.YearMonth {
+	t := time.Date(now.Year(), now.Month()-time.Month(monthsToSeed-1-i), 1, 0, 0, 0, 0, time.UTC)
 	return domain.YearMonth{Year: t.Year(), Month: t.Month()}
 }
 

@@ -2,6 +2,7 @@ package seed_test
 
 import (
 	"context"
+	"errors"
 	"path/filepath"
 	"testing"
 	"time"
@@ -162,6 +163,35 @@ func TestRunRefusesANonEmptyDatabase(t *testing.T) {
 	categories, _ := svc.ListCategories(ctx, true)
 	if len(categories) != 1 {
 		t.Errorf("categories = %d after a refused run, want the original 1", len(categories))
+	}
+}
+
+func TestRunRefusesADatabaseWithOnlyYourOwnData(t *testing.T) {
+	now := date(2026, time.October, 15)
+	tests := []struct {
+		name  string
+		setup func(t *testing.T, svc *app.Service)
+	}{
+		{"custom partner name", func(t *testing.T, svc *app.Service) {
+			if err := svc.UpdateSettings(ctx, map[string]string{"partner_name": "Bia"}); err != nil {
+				t.Fatalf("setup error = %v", err)
+			}
+		}},
+		{"only a settlement", func(t *testing.T, svc *app.Service) {
+			tx := domain.Transaction{Date: now, Type: domain.Settlement, Amount: 1000}
+			if _, err := svc.CreateTransaction(ctx, tx); err != nil {
+				t.Fatalf("setup error = %v", err)
+			}
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			svc := newService(t)
+			tt.setup(t, svc)
+			if err := seed.Run(ctx, svc, now); !errors.Is(err, seed.ErrNotEmpty) {
+				t.Fatalf("Run() error = %v, want ErrNotEmpty", err)
+			}
+		})
 	}
 }
 
