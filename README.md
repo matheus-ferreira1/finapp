@@ -6,9 +6,11 @@ stays in one SQLite file on your machine.
 
 ## Screenshots
 
-![Monthly summary](docs/screenshots/summary.png)
+Sample data, default pt-BR interface (English is available in the settings).
 
-![Spending by category](docs/screenshots/spending.png)
+![Monthly summary ("Resumo Mensal"): gross income, expenses and balance per month, planned vs realized](docs/screenshots/summary.png)
+
+![Spending by category ("Gastos por Categoria"): expense totals per category and month](docs/screenshots/spending.png)
 
 ## Running
 
