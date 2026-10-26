@@ -4,6 +4,14 @@ A local-first personal finance app that replaces a spreadsheet. A single binary
 (Go + SQLite + embedded React app): run it and it opens in your browser. Your data
 stays in one SQLite file on your machine.
 
+## Screenshots
+
+Sample data, default pt-BR interface (English is available in the settings).
+
+![Monthly summary ("Resumo Mensal"): gross income, expenses and balance per month, planned vs realized](docs/screenshots/summary.png)
+
+![Spending by category ("Gastos por Categoria"): expense totals per category and month](docs/screenshots/spending.png)
+
 ## Running
 
 Run `./finapp`: it starts a local server and opens your browser. Closing the terminal stops it.
