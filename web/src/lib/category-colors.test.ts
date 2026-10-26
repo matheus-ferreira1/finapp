@@ -16,6 +16,10 @@ describe('categoryColor', () => {
     for (let id = 1; id < 30; id++) expect(categoryColor(id)).not.toBe(categoryColor(id + 1))
   })
 
+  it('stays inside the palette for negative ids', () => {
+    expect(CATEGORY_PALETTE).toContain(categoryColor(-3))
+  })
+
   it('has ten distinct hues', () => {
     expect(new Set(CATEGORY_PALETTE).size).toBe(10)
   })

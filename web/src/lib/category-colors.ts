@@ -21,5 +21,6 @@ export const CATEGORY_PALETTE = [
  */
 export function categoryColor(id: number | null): string {
   if (id === null) return 'var(--color-ink-muted)'
-  return CATEGORY_PALETTE[id % CATEGORY_PALETTE.length]
+  const n = CATEGORY_PALETTE.length
+  return CATEGORY_PALETTE[((id % n) + n) % n]
 }

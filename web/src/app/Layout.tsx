@@ -25,7 +25,7 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen bg-paper text-ink md:grid md:grid-cols-[14rem_1fr]">
-      <aside className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-surface p-1 md:sticky md:top-0 md:h-screen md:border-t-0 md:border-r md:p-4">
+      <aside className="fixed inset-x-0 bottom-0 z-10 border-t border-line bg-surface p-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] md:sticky md:top-0 md:h-screen md:border-t-0 md:border-r md:p-4">
         <span className="mb-6 hidden font-display text-2xl font-bold tracking-tight md:block">{t('app.name')}</span>
         <nav aria-label={t('nav.label')} className="flex gap-1 md:flex-col">
           {TABS.map(({ to, key, icon }) => (
@@ -39,7 +39,7 @@ export default function Layout() {
         </nav>
       </aside>
 
-      <div className="min-w-0 pb-20 md:pb-0">
+      <div className="min-w-0 pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
         {error && (
           <div
             role="alert"

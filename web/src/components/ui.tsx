@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef } from 'react'
 import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'
+import { useTranslation } from 'react-i18next'
 import { categoryColor } from '../lib/category-colors'
 
 const BUTTON_STYLES = {
@@ -86,13 +87,12 @@ interface SegmentedControlProps<T extends string> {
 /** A few mutually exclusive choices that are always visible, instead of a dropdown. */
 export function SegmentedControl<T extends string>({ label, value, options, onChange }: SegmentedControlProps<T>) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-control bg-ink/5 p-0.5">
+    <div role="group" aria-label={label} className="inline-flex rounded-control bg-ink/5 p-0.5">
       {options.map((option) => (
         <button
           key={option.value}
           type="button"
-          role="radio"
-          aria-checked={option.value === value}
+          aria-pressed={option.value === value}
           onClick={() => onChange(option.value)}
           className={`rounded-[0.375rem] px-3 py-1 text-sm font-medium transition-colors ${
             option.value === value ? 'bg-surface text-ink ring-1 ring-line' : 'text-ink-muted hover:text-ink'
@@ -108,7 +108,7 @@ export function SegmentedControl<T extends string>({ label, value, options, onCh
 /** Content hidden until asked for, like the exact table behind a chart. */
 export function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
   return (
-    <details className="group mt-4">
+    <details className="mt-4">
       <summary className="cursor-pointer text-sm font-medium text-ink-muted hover:text-ink">{summary}</summary>
       <div className="mt-3">{children}</div>
     </details>
@@ -129,11 +129,16 @@ interface DrawerProps {
 export function Drawer({ open, title, onClose, children }: DrawerProps) {
   const ref = useRef<HTMLDialogElement>(null)
   const titleId = useId()
+  const { t } = useTranslation()
 
   useEffect(() => {
     const dialog = ref.current
     if (!dialog || dialog.open === open) return
-    if (!open) return dialog.close?.() ?? dialog.removeAttribute('open')
+    if (!open) {
+      if (dialog.close) dialog.close()
+      else dialog.removeAttribute('open')
+      return
+    }
     if (dialog.showModal) dialog.showModal()
     else dialog.setAttribute('open', '')
   }, [open])
@@ -142,14 +147,17 @@ export function Drawer({ open, title, onClose, children }: DrawerProps) {
     <dialog
       ref={ref}
       aria-labelledby={titleId}
-      onClose={onClose}
+      // closing from the parent also fires `close`; only report the user's own closes
+      onClose={() => open && onClose()}
       className="m-0 ml-auto h-full max-h-none w-full max-w-md bg-paper p-6 text-ink shadow-none ring-1 ring-line backdrop:bg-ink/30"
     >
       <div className="mb-4 flex items-center justify-between">
         <h2 id={titleId} className="text-xl font-semibold tracking-tight">
           {title}
         </h2>
-        <Button onClick={onClose}>×</Button>
+        <Button onClick={onClose} aria-label={t('actions.close')}>
+          ×
+        </Button>
       </div>
       {open && children}
     </dialog>

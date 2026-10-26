@@ -14,8 +14,8 @@
   --ink: #1b1446;
   --ink-muted: #6b6690;
   --line: rgb(27 20 70 / 0.1);
-  --income: #00a889;
-  --expense: #ff4f6d;
+  --income: #007d68;
+  --expense: #d0233f;
   --shared: #7b61ff;
   --owed: #ffb020;
 
@@ -79,7 +79,6 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-variant-numeric: tabular-nums;
 }
 
 h1,
@@ -92,16 +91,6 @@ h3 {
 :focus-visible {
   outline: 2px solid var(--shared);
   outline-offset: 2px;
-}
-
-/* Planned but not yet realized: the same hue as the solid mark, hatched. See HatchDefs. */
-.hatched {
-  background-image: repeating-linear-gradient(
-    135deg,
-    transparent 0 4px,
-    rgb(255 255 255 / 0.55) 4px 6px
-  );
-  opacity: 0.7;
 }
 
 @media (prefers-reduced-motion: reduce) {
