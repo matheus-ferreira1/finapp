@@ -63,6 +63,42 @@ describe('App shell', () => {
     expect(screen.getByRole('link', { name: 'Lançamentos' })).not.toHaveAttribute('aria-current')
   })
 
+  describe('More menu', () => {
+    async function openMenu() {
+      stubSettings()
+      const user = userEvent.setup()
+      renderWithProviders(<App />)
+      await screen.findByRole('link', { name: 'Visão Geral' })
+      await user.click(screen.getByRole('button', { name: 'Mais' }))
+      expect(screen.getByRole('list')).toBeInTheDocument()
+      return user
+    }
+
+    it('closes with Escape', async () => {
+      const user = await openMenu()
+      await user.keyboard('{Escape}')
+      expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    })
+
+    it('closes when pressing anywhere else', async () => {
+      const user = await openMenu()
+      await user.click(screen.getByRole('heading', { level: 1 }))
+      expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    })
+
+    it('closes when another tab of the bar is chosen', async () => {
+      const user = await openMenu()
+      await user.click(screen.getByRole('link', { name: 'Lançamentos' }))
+      expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    })
+
+    it('closes with its own button', async () => {
+      const user = await openMenu()
+      await user.click(screen.getByRole('button', { name: 'Mais' }))
+      expect(screen.queryByRole('list')).not.toBeInTheDocument()
+    })
+  })
+
   it.each([
     ['/overview', 'Visão Geral'],
     ['/transactions', 'Lançamentos'],

@@ -51,8 +51,9 @@ export default function Overview() {
   }, [transactions.data, categories.data, view])
   const totals = flowTotals(flow)
   // one message is enough when several requests fail together, as when the server is down
-  const failure = [transactions, monthly, spending].find((query) => query.isError)
-  const isEmpty = transactions.isSuccess && transactions.data.length === 0
+  const failure = [transactions, categories, monthly, spending, previousYear].find((query) => query.isError)
+  // a month with only zero amounts, or only settlements in the mine view, has nothing to draw either
+  const isEmpty = transactions.isSuccess && flow.sources.length + flow.targets.length === 0
 
   return (
     <>

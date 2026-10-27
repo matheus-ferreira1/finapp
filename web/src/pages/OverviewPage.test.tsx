@@ -63,11 +63,12 @@ async function open({
   monthly = year({ 10: owing(10000) }),
   settings = { partner_name: '', currency: 'BRL', locale: 'pt-BR' } as Settings,
   monthlyFailure = null as string | null,
+  categoryReportFailure = null as string | null,
   title = 'Visão Geral',
 } = {}) {
   vi.useFakeTimers({ toFake: ['Date'] })
   vi.setSystemTime(new Date(2026, 9, 24))
-  const server = stubServer({ settings, categories: CATEGORIES, transactions, categoryRows, monthly, monthlyFailure })
+  const server = stubServer({ settings, categories: CATEGORIES, transactions, categoryRows, monthly, monthlyFailure, categoryReportFailure })
   const user = userEvent.setup()
   renderWithProviders(<App />, { route })
   await screen.findByRole('heading', { level: 1, name: title })
@@ -211,6 +212,27 @@ describe('Overview page', () => {
 
       expect(await screen.findByRole('region', { name: 'Com Ana' })).toHaveTextContent('Você e Ana estão quites')
     })
+  })
+
+  it('asks for the first transaction when the month only has settlements and the view is mine', async () => {
+    await open({ route: '/overview?view=mine', transactions: [tx({ id: 9, type: 'settlement', amount_cents: 10000 })] })
+
+    expect(await screen.findByText('Nada registrado neste mês ainda.')).toBeInTheDocument()
+    expect(screen.queryByText(/Entraram/)).not.toBeInTheDocument()
+  })
+
+  it('reports a failure of the category report too', async () => {
+    await open({ categoryReportFailure: 'category report is down' })
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('category report is down')
+  })
+
+  it('says a category is new when it had no spending the month before', async () => {
+    await open({ categoryRows: [row(10, 'Moradia', { 10: 250000 })] })
+
+    const top = await screen.findByRole('region', { name: 'Maiores despesas' })
+    expect(top).toHaveTextContent('Novo neste mês')
+    expect(top).not.toHaveTextContent('em relação ao mês anterior')
   })
 
   it('shows one error when the reports cannot be loaded', async () => {

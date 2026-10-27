@@ -26,7 +26,7 @@ export default function ChartFrame({ width, height, label, tip, minWidth, childr
         <div
           role="tooltip"
           className="pointer-events-none absolute z-10 min-w-32 rounded-control bg-ink px-3 py-2 text-xs text-paper"
-          style={{ left: `${(tip.x / width) * 100}%`, top: `${(tip.y / height) * 100}%`, transform: 'translate(-50%, calc(-100% - 8px))' }}
+          style={{ left: `${Math.min(88, Math.max(12, (tip.x / width) * 100))}%`, top: `${(tip.y / height) * 100}%`, transform: 'translate(-50%, calc(-100% - 8px))' }}
         >
           <p className="mb-1 font-semibold">{tip.title}</p>
           {tip.lines.map((line) => (

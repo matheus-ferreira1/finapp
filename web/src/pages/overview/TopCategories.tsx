@@ -23,7 +23,8 @@ export default function TopCategories({ categories }: { categories: TopCategory[
             <div className="min-w-0">
               <CategoryChip id={c.categoryId} name={c.name} />
               <p className="mt-0.5 text-xs text-ink-muted">
-                {c.change === null ? t('overview.top.none') : t('overview.top.change', { percent: formatPercentChange(c.change, settings.locale) })}
+                {c.change !== null && t('overview.top.change', { percent: formatPercentChange(c.change, settings.locale) })}
+                {c.change === null && c.previous === 0 && t('overview.top.new')}
               </p>
             </div>
             <Sparkline values={c.trend} color={categoryColor(c.categoryId)} label={t('overview.top.trend', { name: c.name })} />

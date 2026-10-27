@@ -8,7 +8,7 @@ import MonthAxes from './MonthAxes'
 
 const WIDTH = 720
 const HEIGHT = 260
-const MARGIN: Margin = { top: 12, right: 8, bottom: 28, left: 68 }
+const MARGIN: Margin = { top: 12, right: 8, bottom: 28, left: 76 }
 const GAP = 2
 
 interface Props {

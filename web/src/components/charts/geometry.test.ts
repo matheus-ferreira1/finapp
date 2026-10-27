@@ -22,6 +22,14 @@ describe('spreadLabels', () => {
     expect(Math.min(...spreadLabels([0, 1, 2], 30, 10, 400))).toBeGreaterThanOrEqual(10)
   })
 
+  it('keeps every label inside the chart even when they cannot all have the full gap', () => {
+    const spread = spreadLabels([0, 5, 10, 15, 20], 30, 10, 90)
+    expect(Math.min(...spread)).toBeGreaterThanOrEqual(10)
+    expect(Math.max(...spread)).toBeLessThanOrEqual(90)
+    expect(spread).toEqual([...spread].sort((a, b) => a - b))
+    expect(new Set(spread).size).toBe(5)
+  })
+
   it('handles no labels and one label', () => {
     expect(spreadLabels([], 30, 0, 100)).toEqual([])
     expect(spreadLabels([50], 30, 0, 100)).toEqual([50])

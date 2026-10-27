@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Button } from '../components/ui'
@@ -38,17 +38,33 @@ function Icon({ path }: { path: string }) {
 function MoreMenu() {
   const { t } = useTranslation()
   const { pathname } = useLocation()
-  const [open, setOpen] = useState(false)
+  // the path the menu was opened on: moving to another page leaves it closed
+  const [openedOn, setOpenedOn] = useState<string | null>(null)
+  const open = openedOn === pathname
   const items = TABS.filter((tab) => tab.more)
-  const active = items.some((tab) => pathname.startsWith(tab.to))
+  const active = items.some((tab) => pathname === tab.to || pathname.startsWith(`${tab.to}/`))
+  const menu = useRef<HTMLDivElement>(null)
+
+  // Escape and pressing anywhere else close it too
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpenedOn(null)
+    const onPress = (e: MouseEvent) => menu.current?.contains(e.target as Node) || setOpenedOn(null)
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('mousedown', onPress)
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('mousedown', onPress)
+    }
+  }, [open])
 
   return (
-    <div className="relative flex max-md:min-w-0 max-md:flex-1 md:hidden">
+    <div ref={menu} className="relative flex max-md:min-w-0 max-md:flex-1 md:hidden">
       <button
         type="button"
         aria-expanded={open}
         aria-controls="more-menu"
-        onClick={() => setOpen(!open)}
+        onClick={() => setOpenedOn(open ? null : pathname)}
         className={`${tabClass(active, 'bar')} w-full`}
       >
         <Icon path="M5 12h.01M12 12h.01M19 12h.01" />
@@ -58,7 +74,7 @@ function MoreMenu() {
         <ul id="more-menu" className="absolute right-0 bottom-full mb-2 min-w-48 rounded-panel bg-surface p-1 ring-1 ring-line">
           {items.map(({ to, key, icon }) => (
             <li key={to}>
-              <NavLink to={to} onClick={() => setOpen(false)} className={({ isActive }) => tabClass(isActive, 'menu')}>
+              <NavLink to={to} className={({ isActive }) => tabClass(isActive, 'menu')}>
                 <Icon path={icon} />
                 {t(key)}
               </NavLink>

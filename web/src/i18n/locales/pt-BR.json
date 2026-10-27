@@ -212,7 +212,7 @@
       "title": "Maiores despesas",
       "trend": "{{name}}, últimos meses",
       "change": "{{percent}} em relação ao mês anterior",
-      "none": "Sem gasto para comparar"
+      "new": "Novo neste mês"
     },
     "empty": {
       "message": "Nada registrado neste mês ainda.",

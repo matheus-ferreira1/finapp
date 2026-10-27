@@ -212,7 +212,7 @@
       "title": "Biggest expenses",
       "trend": "{{name}}, last months",
       "change": "{{percent}} vs previous month",
-      "none": "No spending to compare with"
+      "new": "New this month"
     },
     "empty": {
       "message": "Nothing recorded in this month yet.",
