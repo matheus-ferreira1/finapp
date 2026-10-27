@@ -76,6 +76,14 @@ const sumValues = (nodes: Map<string, FlowNode>) => [...nodes.values()].reduce((
 
 const positive = (nodes: Map<string, FlowNode>) => [...nodes.values()].filter((n) => n.value > 0)
 
+/** What came in, what went out and what is left (negative when overspent) in a month's flow. */
+export function flowTotals(flow: Flow): { income: number; expense: number; balance: number } {
+  const total = (nodes: FlowNode[], skip: FlowNode['kind']) => nodes.filter((n) => n.kind !== skip).reduce((sum, n) => sum + n.value, 0)
+  const income = total(flow.sources, 'overspent')
+  const expense = total(flow.targets, 'leftover')
+  return { income, expense, balance: income - expense }
+}
+
 export interface PlanBar {
   month: number
   /** Already happened: drawn solid. */

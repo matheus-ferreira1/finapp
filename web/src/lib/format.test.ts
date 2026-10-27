@@ -1,4 +1,4 @@
-import { formatDate, formatMoney, formatMonthYear } from './format'
+import { formatDate, formatMoney, formatMonthYear, formatCompactMoney, formatPercentChange, longMonthName, shortMonthName } from './format'
 
 // Intl uses a no-break space between symbol and number; compare with a plain one.
 const plain = (s: string) => s.replace(/ /g, ' ')
@@ -29,5 +29,38 @@ describe('formatMonthYear', () => {
   it('uses MM/YYYY', () => {
     expect(formatMonthYear(2026, 1)).toBe('01/2026')
     expect(formatMonthYear(2026, 11)).toBe('11/2026')
+  })
+})
+
+describe('formatCompactMoney', () => {
+  it('drops the cents and abbreviates thousands for chart axes', () => {
+    expect(formatCompactMoney(1250000, 'en', 'USD')).toBe('$12.5K')
+    expect(formatCompactMoney(0, 'en', 'USD')).toBe('$0')
+  })
+
+  it('follows the locale', () => {
+    expect(formatCompactMoney(1000000, 'pt-BR', 'BRL').replace(/\s/g, ' ')).toMatch(/^R\$ 10 mil$/)
+  })
+})
+
+describe('shortMonthName', () => {
+  it('names a month of the year in the locale', () => {
+    expect(shortMonthName(3, 'en')).toBe('Mar')
+    expect(shortMonthName(3, 'pt-BR').toLowerCase()).toContain('mar')
+  })
+})
+
+describe('longMonthName', () => {
+  it('writes the month and year out in the locale', () => {
+    expect(longMonthName(2026, 10, 'en')).toBe('October 2026')
+    expect(longMonthName(2026, 10, 'pt-BR')).toBe('outubro de 2026')
+  })
+})
+
+describe('formatPercentChange', () => {
+  it('shows the sign of a change and no decimals', () => {
+    expect(formatPercentChange(0.256, 'en')).toBe('+26%')
+    expect(formatPercentChange(-0.5, 'en')).toBe('-50%')
+    expect(formatPercentChange(0, 'en')).toBe('0%')
   })
 })

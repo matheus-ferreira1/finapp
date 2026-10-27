@@ -8,7 +8,9 @@
     "summary": "Monthly Summary",
     "spending": "Spending by Category",
     "recurrences": "Recurrences",
-    "settings": "Settings"
+    "settings": "Settings",
+    "overview": "Overview",
+    "more": "More"
   },
   "errors": {
     "server": "Could not connect to the server. Make sure finapp is running."
@@ -169,6 +171,52 @@
     "columns": {
       "category": "Category",
       "total": "Total"
+    }
+  },
+  "overview": {
+    "views": {
+      "label": "Amounts",
+      "gross": "Gross",
+      "mine": "Mine"
+    },
+    "hero": {
+      "surplus": "<in>{{income}}</in> came in, <out>{{expense}}</out> went out and <left>{{balance}}</left> was left over.",
+      "deficit": "<in>{{income}}</in> came in, <out>{{expense}}</out> went out and you overspent by <left>{{balance}}</left>."
+    },
+    "flow": {
+      "title": "Where the money went",
+      "label": "Money flow in {{month}}: where the money came from and where it went",
+      "partner": "Partner",
+      "overspent": "Overspent",
+      "leftover": "Left over",
+      "uncategorized": "No category"
+    },
+    "year": {
+      "title": "The year",
+      "label": "{{measure}} in {{year}}, month by month",
+      "measure": "Show",
+      "income": "Income",
+      "expense": "Expenses",
+      "realized": "Confirmed",
+      "planned": "Still planned"
+    },
+    "partner": {
+      "title": "With {{name}}",
+      "owes": "{{name}} owes you {{amount}}",
+      "youOwe": "You owe {{name}} {{amount}}",
+      "settled": "You and {{name}} are settled up",
+      "line": "What {{name}} owes you at the end of each month",
+      "series": "Owed"
+    },
+    "top": {
+      "title": "Biggest expenses",
+      "trend": "{{name}}, last months",
+      "change": "{{percent}} vs previous month",
+      "new": "New this month"
+    },
+    "empty": {
+      "message": "Nothing recorded in this month yet.",
+      "action": "Add a transaction"
     }
   }
 }

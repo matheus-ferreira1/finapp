@@ -8,7 +8,9 @@
     "summary": "Resumo Mensal",
     "spending": "Gastos por Categoria",
     "recurrences": "Recorrências",
-    "settings": "Configuração"
+    "settings": "Configuração",
+    "overview": "Visão Geral",
+    "more": "Mais"
   },
   "errors": {
     "server": "Não foi possível conectar ao servidor. Verifique se o finapp está em execução."
@@ -169,6 +171,52 @@
     "columns": {
       "category": "Categoria",
       "total": "Total"
+    }
+  },
+  "overview": {
+    "views": {
+      "label": "Valores",
+      "gross": "Bruto",
+      "mine": "Meu"
+    },
+    "hero": {
+      "surplus": "Entraram <in>{{income}}</in>, saíram <out>{{expense}}</out> e sobraram <left>{{balance}}</left>.",
+      "deficit": "Entraram <in>{{income}}</in>, saíram <out>{{expense}}</out> e faltaram <left>{{balance}}</left>."
+    },
+    "flow": {
+      "title": "Para onde foi o dinheiro",
+      "label": "Fluxo do dinheiro em {{month}}: de onde veio e para onde foi",
+      "partner": "Parceiro(a)",
+      "overspent": "Acima da receita",
+      "leftover": "Sobrou",
+      "uncategorized": "Sem categoria"
+    },
+    "year": {
+      "title": "O ano",
+      "label": "{{measure}} em {{year}}, mês a mês",
+      "measure": "Mostrar",
+      "income": "Receitas",
+      "expense": "Despesas",
+      "realized": "Confirmado",
+      "planned": "Ainda previsto"
+    },
+    "partner": {
+      "title": "Com {{name}}",
+      "owes": "{{name}} te deve {{amount}}",
+      "youOwe": "Você deve {{amount}} a {{name}}",
+      "settled": "Você e {{name}} estão quites",
+      "line": "Quanto {{name}} te deve no fim de cada mês",
+      "series": "A receber"
+    },
+    "top": {
+      "title": "Maiores despesas",
+      "trend": "{{name}}, últimos meses",
+      "change": "{{percent}} em relação ao mês anterior",
+      "new": "Novo neste mês"
+    },
+    "empty": {
+      "message": "Nada registrado neste mês ainda.",
+      "action": "Adicionar lançamento"
     }
   }
 }
