@@ -7,6 +7,8 @@ interface ChartFrameProps {
   /** Says what the chart shows, for people who cannot see it. */
   label: string
   tip: Tip | null
+  /** Below this width (px) the chart scrolls sideways instead of shrinking its text. */
+  minWidth?: number
   children: ReactNode
 }
 
@@ -14,9 +16,9 @@ interface ChartFrameProps {
  * Draws in fixed coordinates and scales with CSS, so it needs no size measuring. Marks inside are
  * focusable and carry their own labels, hence a labelled group rather than an image.
  */
-export default function ChartFrame({ width, height, label, tip, children }: ChartFrameProps) {
-  return (
-    <div className="relative">
+export default function ChartFrame({ width, height, label, tip, minWidth, children }: ChartFrameProps) {
+  const chart = (
+    <div className="relative" style={minWidth ? { minWidth } : undefined}>
       <svg viewBox={`0 0 ${width} ${height}`} role="group" aria-label={label} className="h-auto w-full overflow-visible">
         {children}
       </svg>
@@ -40,4 +42,6 @@ export default function ChartFrame({ width, height, label, tip, children }: Char
       )}
     </div>
   )
+  // room above the chart keeps tooltips from being clipped by the scroll container
+  return minWidth ? <div className="-mt-12 overflow-x-auto pt-12">{chart}</div> : chart
 }

@@ -33,8 +33,9 @@ export const useMonthlyReport = (year: number) =>
     placeholderData: keepPreviousData,
   })
 
-export const useCategoryReport = (year: number, view: CategoryReportView, scope: CategoryReportScope) =>
+export const useCategoryReport = (year: number, view: CategoryReportView, scope: CategoryReportScope, enabled = true) =>
   useQuery({
+    enabled,
     queryKey: [...queryKeys.categoryReport, year, view, scope],
     queryFn: () => api.categoryReport(year, view, scope),
     // keep the table on screen while another year or option loads

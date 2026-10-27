@@ -19,3 +19,19 @@ export interface Margin {
   bottom: number
   left: number
 }
+
+/**
+ * Vertical positions for labels that want to sit at `centers` (ascending) but need `gap` between
+ * neighbours. Crowded labels are pushed down, and if that runs past `max` the stack is pulled back up.
+ */
+export function spreadLabels(centers: number[], gap: number, min: number, max: number): number[] {
+  const pos: number[] = []
+  centers.forEach((center, i) => {
+    pos.push(Math.max(center, i === 0 ? min : pos[i - 1] + gap))
+  })
+  for (let i = pos.length - 1; i >= 0; i--) {
+    const limit = i === pos.length - 1 ? max : pos[i + 1] - gap
+    pos[i] = Math.min(pos[i], limit)
+  }
+  return pos
+}

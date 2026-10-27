@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 import i18n from './i18n'
@@ -12,22 +12,43 @@ afterEach(async () => {
 })
 
 describe('App shell', () => {
-  it('shows the five tabs in Portuguese by default', async () => {
+  it('shows the tabs in Portuguese by default', async () => {
     stubSettings()
     renderWithProviders(<App />)
 
     const nav = screen.getByRole('navigation')
-    for (const label of ['Lançamentos', 'Resumo Mensal', 'Gastos por Categoria', 'Recorrências', 'Configuração']) {
+    for (const label of ['Visão Geral', 'Lançamentos', 'Resumo Mensal', 'Gastos por Categoria', 'Recorrências', 'Configuração']) {
       expect(await screen.findByRole('link', { name: label })).toBeInTheDocument()
     }
     expect(nav).toBeInTheDocument()
   })
 
-  it('opens the transactions screen from the root', async () => {
+  it('opens the overview from the root and from unknown addresses', async () => {
     stubSettings()
-    renderWithProviders(<App />)
+    const { unmount } = renderWithProviders(<App />)
+    expect(await screen.findByRole('heading', { level: 1, name: 'Visão Geral' })).toBeInTheDocument()
+    unmount()
 
-    expect(await screen.findByRole('heading', { level: 1, name: 'Lançamentos' })).toBeInTheDocument()
+    renderWithProviders(<App />, { route: '/nowhere' })
+    expect(await screen.findByRole('heading', { level: 1, name: 'Visão Geral' })).toBeInTheDocument()
+  })
+
+  it('keeps Recurrences and Settings behind a More button for small screens', async () => {
+    stubSettings()
+    const user = userEvent.setup()
+    renderWithProviders(<App />)
+    await screen.findByRole('link', { name: 'Visão Geral' })
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Mais' }))
+
+    const menu = screen.getByRole('list')
+    expect(within(menu).getByRole('link', { name: 'Recorrências' })).toBeInTheDocument()
+    expect(within(menu).getByRole('link', { name: 'Configuração' })).toBeInTheDocument()
+
+    await user.click(within(menu).getByRole('link', { name: 'Configuração' }))
+    expect(await screen.findByRole('heading', { level: 1, name: 'Configuração' })).toBeInTheDocument()
+    expect(screen.queryByRole('list')).not.toBeInTheDocument()
   })
 
   it('navigates between screens and marks the current tab', async () => {
@@ -43,6 +64,7 @@ describe('App shell', () => {
   })
 
   it.each([
+    ['/overview', 'Visão Geral'],
     ['/transactions', 'Lançamentos'],
     ['/summary', 'Resumo Mensal'],
     ['/spending', 'Gastos por Categoria'],
@@ -69,7 +91,7 @@ describe('App shell', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
     renderWithProviders(<App />)
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Não foi possível conectar ao servidor')
+    expect(await screen.findByText(/Não foi possível conectar ao servidor/)).toBeInTheDocument()
     expect(screen.getByRole('navigation')).toBeInTheDocument()
   })
 })

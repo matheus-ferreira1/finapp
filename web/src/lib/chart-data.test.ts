@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { CategoryReportRow, Figures, MonthSummary, Transaction } from './api'
-import { balanceSeries, monthFlow, planBars, stackMonths } from './chart-data'
+import { balanceSeries, flowTotals, monthFlow, planBars, stackMonths } from './chart-data'
 
 const NAMES = new Map([
   [1, 'Salary'],
@@ -162,5 +162,23 @@ describe('balanceSeries', () => {
 
     expect(balanceSeries(months, 'planned')).toEqual([100, 40])
     expect(balanceSeries(months, 'realized')).toEqual([40, 100])
+  })
+})
+
+describe('flowTotals', () => {
+  const income = tx({ type: 'income', category_id: 1, amount_cents: 500000 })
+  const food = tx({ type: 'expense', category_id: 11, amount_cents: 200000 })
+
+  it('reports what came in, what went out and what is left', () => {
+    expect(flowTotals(monthFlow([income, food], NAMES, 'gross'))).toEqual({ income: 500000, expense: 200000, balance: 300000 })
+  })
+
+  it('reports a negative balance when more went out than came in, without counting the overspent node as income', () => {
+    const big = tx({ type: 'expense', category_id: 11, amount_cents: 800000 })
+    expect(flowTotals(monthFlow([income, big], NAMES, 'gross'))).toEqual({ income: 500000, expense: 800000, balance: -300000 })
+  })
+
+  it('is zero for an empty month', () => {
+    expect(flowTotals(monthFlow([], NAMES, 'gross'))).toEqual({ income: 0, expense: 0, balance: 0 })
   })
 })

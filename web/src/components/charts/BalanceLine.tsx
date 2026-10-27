@@ -5,9 +5,10 @@ import { useTip } from './useTip'
 import type { Margin } from './geometry'
 import MonthAxes from './MonthAxes'
 
-const WIDTH = 720
-const HEIGHT = 200
-const MARGIN: Margin = { top: 12, right: 8, bottom: 28, left: 56 }
+// narrower than the bar charts: it sits in a side panel, so the text must not shrink as much
+const WIDTH = 420
+const HEIGHT = 190
+const MARGIN: Margin = { top: 12, right: 8, bottom: 28, left: 68 }
 
 interface Props {
   /** One value per month, January first. */
